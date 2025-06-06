@@ -1,0 +1,35 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+  font-family: "Inter", sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.device-card {
+  border: 1px solid white;
+  background-color: #1c1f24;
+  border-radius: 20px;
+  color: white;
+  max-width: 325px;
+}
+
+.device-status {
+  font-weight: 300;
+  margin: 0 0 21px 50px;
+}
+
+.device-name {
+  margin: 21px 0 6px 50px;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.online {
+  color: #378371;
+}
+
+.offline {
+  color: #954250;
+}
