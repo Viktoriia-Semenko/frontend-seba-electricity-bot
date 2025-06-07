@@ -1,0 +1,30 @@
+﻿* {
+    font-family: "Inter", sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    font-size: 23px;
+    color: white;
+}
+
+.user-card {
+    margin-top: 19px;
+    margin-left: 30px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    background-color: #272c30;
+}
+
+.user-name-container {
+    margin-right: 10px;
+}
+
+.user-image {
+    width: 57px;
+    height: 57px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
