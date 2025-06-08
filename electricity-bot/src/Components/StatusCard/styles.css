@@ -1,0 +1,54 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    font-family: "Inter", sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.status-card {
+    border: 1px solid white;
+    background-color: #1c1f24;
+    border-radius: 20px;
+    color: white;
+    max-width: 978px;
+    padding: 30px;
+}
+
+.status-card__header {
+    margin-top: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.status-icon {
+    width: 85px;
+    height: 85px;
+}
+
+.status-card__title {
+    font-size: 64px;
+    font-weight: 800;
+    margin-left: 28px;
+}
+
+.status-on {
+    color: #1e4c41;
+}
+
+.status-off {
+    color: #954250;
+}
+
+.status--error {
+    color: #954250;
+}
+
+.last-change {
+    font-size: 40px;
+    font-weight: 300;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
