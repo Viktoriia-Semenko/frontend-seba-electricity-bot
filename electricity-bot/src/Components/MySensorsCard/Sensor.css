@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    font-family: "Inter", sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.sensor-card {
+    display: flex;
+    align-items: center;
+    background-color: #1C1F24;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.sensor-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 50%;
+    background-color: #202939;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.sensor-icon img {
+    width: 18px;
+    height: 18px;
+}
+
+.sensor-info {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.sensor-label {
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.sensor-timestamp {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 16px;
+    font-weight: 400;
+}
