@@ -1,0 +1,28 @@
+﻿.sign-button {
+    padding: 13px 63px;
+    font-size: 16px;
+    max-width: 181px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #BCBCBC;
+    background-color: #565555;
+    border: none;
+    border-radius: 36px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.sign-button:hover {
+    background-color: #6A6A6A;
+}
+
+.sign-button:active {
+    transform: scale(0.95);
+}
+
+.sign-button:disabled {
+    background-color: #EFEEEE;
+    cursor: not-allowed;
+    color: #BCBCBC;
+}
