@@ -1,0 +1,29 @@
+﻿.action-button {
+    padding: 12px 32px;
+    font-size: 16px;
+    max-width: 93px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #4182F9;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.action-button:hover {
+    background-color: #357ae8;
+}
+
+.action-button:active {
+    background-color: #2c6bbd;
+    transform: translateY(0);
+}
+
+.action-button:disabled {
+    background-color: #bcbcbc;
+    cursor: not-allowed;
+    transform: none;
+}
