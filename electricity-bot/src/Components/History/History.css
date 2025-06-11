@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    font-family: "Inter", sans-serif;
+    box-sizing: border-box;
+}
+
+.history-card {
+    width: 992px;
+    height: 90px;
+    background-color: #272C30;
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    padding: 0 21px;
+    border-bottom: 2px solid #515151;
+}
+
+.history-card.no-border {
+    border-bottom: none;
+}
+
+.status-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    min-width: 25px;
+}
+
+.status-indicator {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.status-indicator.green {
+    background-color: #378371;
+}
+
+.status-indicator.red {
+    background-color: #954250;
+}
+
+.sensor-time {
+    font-size: 16px;
+    color: white;
+}
+
+.sensor-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 9px;
+}
+
+.sensor-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+}
+
+.sensor-status {
+    font-size: 16px;
+    font-weight: 400;
+    color: white;
+    opacity: 0.8;
+}
