@@ -13,21 +13,19 @@ import * as React from "react";
 // const { Option } = Select;
 
 interface RegistrationFormProps {
+    onSub: React.FormEventHandler<HTMLFormElement>;
+    isDisabled?: boolean;
     registerUrl?: string;
 }
 
-export const RegistrationForm: React.FC<RegistrationFormProps> = ({registerUrl = "#"} : RegistrationFormProps) => {
+export const RegistrationForm: React.FC<RegistrationFormProps> = ({registerUrl = "#", onSub, isDisabled = false} : RegistrationFormProps) => {
     const [form] = Form.useForm();
-
-    const onFinish = (values: unknown) => {
-        console.log('Received values of form: ', values);
-    };
 
     return (
         <Form
             form={form}
             name="register"
-            onFinish={onFinish}
+            onFinish={onSub}
             style={{ maxWidth: 600 }}
             scrollToFirstError
         >
@@ -134,7 +132,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({registerUrl =
             </Form.Item>
 
             <Form.Item>
-                <SignButton title="Sign Up" htmlType="submit" />
+                <SignButton isDisabled={isDisabled} title="Sign Up" htmlType="submit" />
             </Form.Item>
         </Form>
     );
