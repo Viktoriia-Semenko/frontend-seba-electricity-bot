@@ -8,8 +8,8 @@
 }
 
 .sensor-card {
-    width: 277px;
-    height: 70px;
+    max-width: 277px;
+    max-height: 70px;
 
     display: flex;
     align-items: center;
