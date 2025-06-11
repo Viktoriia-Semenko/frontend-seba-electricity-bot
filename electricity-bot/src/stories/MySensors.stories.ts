@@ -11,19 +11,26 @@ const meta = {
         layout: 'fullscreen',
     },
     args: {
-        label: 'Apartment sensor',
+        label: 'Sensor',
         timestamp: '1 month ago',
-        onClick: fn(() => alert('No new updates!')),
+        type: 'apartment',
+        onClick: fn(() => alert('Sensor clicked!')),
     },
 } satisfies Meta<typeof SensorCard>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
-
-export const CustomTime: Story = {
+export const ApartmentSensor: Story = {
     args: {
-        timestamp: '5 minutes ago',
+        type: 'apartment',
+        label: 'Apartment Sensor',
+    },
+};
+
+export const OfficeSensor: Story = {
+    args: {
+        type: 'office',
+        label: 'Office Sensor',
     },
 };
