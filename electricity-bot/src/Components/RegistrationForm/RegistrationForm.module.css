@@ -1,0 +1,37 @@
+﻿.input {
+    padding: 20px 40px;
+    border-radius: 36px;
+    font-size: 16px;
+    color: #BCBCBC;
+    border: 1px solid black;
+}
+
+p {
+    color: #565555;
+}
+
+a {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000000;
+}
+
+/*.genderSelect :global(.ant-select-selector) {*/
+/*    position: relative;*/
+/*}*/
+
+/*.genderSelect :global(.ant-select-arrow) {*/
+/*    position: absolute !important;*/
+/*    top: 125% !important;*/
+/*    right: 42px !important;*/
+/*    transform: translateY(-50%) !important;*/
+/*}*/
+
+/*.genderSelect :global(.ant-select-selector) {*/
+/*    padding: 20px 40px !important;*/
+/*    height: 66.74px !important;*/
+/*    border-radius: 36px !important;*/
+/*    border: 1px solid #000 !important;*/
+/*    font-size: 16px !important;*/
+/*    color: #BCBCBC !important;*/
+/*}*/
