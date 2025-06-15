@@ -23,7 +23,7 @@ export const Restored: Story = {
     args: {
         sensorName: 'Apartment sensor',
         status: 'restored',
-        time: '4:20',
+        time: 1718502000000,
     },
 };
 
@@ -31,7 +31,7 @@ export const Lost: Story = {
     args: {
         sensorName: 'Office sensor',
         status: 'lost',
-        time: '23:56',
+        time: 1718502000000,
     },
 };
 
@@ -39,8 +39,7 @@ export const OneCard: Story = {
     args: {
         sensorName: 'Balcony sensor',
         status: 'lost',
-        time: '21:40',
+        time: 1718502000000,
         isLast: true
     }
 };
-
