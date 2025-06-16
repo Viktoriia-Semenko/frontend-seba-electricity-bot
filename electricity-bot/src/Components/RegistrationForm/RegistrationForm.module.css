@@ -1,13 +1,53 @@
-﻿.input {
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.form {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.firstName, .lastName, .gender, .email {
+    margin-bottom: 47px;
+}
+
+.password {
+    margin-bottom: 36px;
+}
+
+.input {
     padding: 20px 40px;
+    max-width: 424px;
+    width: 100%;
     border-radius: 36px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    border: 1px solid black;
+}
+
+option {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #BCBCBC;
+}
+
+.select {
+    padding: 20px 40px;
+    max-width: 424px;
+    width: 100%;
+    border-radius: 36px;
+    font-family: 'Inter', sans-serif;
     font-size: 16px;
     color: #BCBCBC;
     border: 1px solid black;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
 p {
     color: #565555;
+    margin-bottom: 35px;
 }
 
 a {
@@ -16,22 +56,17 @@ a {
     color: #000000;
 }
 
-/*.genderSelect :global(.ant-select-selector) {*/
-/*    position: relative;*/
-/*}*/
+.input::placeholder {
+    color: #BCBCBC;
+}
 
-/*.genderSelect :global(.ant-select-arrow) {*/
-/*    position: absolute !important;*/
-/*    top: 125% !important;*/
-/*    right: 42px !important;*/
-/*    transform: translateY(-50%) !important;*/
-/*}*/
+.select option[value=""] {
+    color: #BCBCBC;
+}
 
-/*.genderSelect :global(.ant-select-selector) {*/
-/*    padding: 20px 40px !important;*/
-/*    height: 66.74px !important;*/
-/*    border-radius: 36px !important;*/
-/*    border: 1px solid #000 !important;*/
-/*    font-size: 16px !important;*/
-/*    color: #BCBCBC !important;*/
-/*}*/
+.error {
+    color: #FF6B6B;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: 10px;
+}
