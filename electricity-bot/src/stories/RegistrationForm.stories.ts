@@ -4,19 +4,10 @@ import { RegistrationForm } from '../Components/RegistrationForm/RegistrationFor
 
 const meta = {
     title: 'Example/RegistrationForm',
-    component: RegistrationForm,
-    tags: ['autodocs'],
-    parameters: {
-        layout: 'fullscreen',
-    }
+    component: RegistrationForm
 } satisfies Meta<typeof RegistrationForm>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const Default: Story = {
-    args: {
-        onSub: () => {},
-        isDisabled: false,
-        registerUrl: "#"
-    }
+export const Primary: Story = {
 };
