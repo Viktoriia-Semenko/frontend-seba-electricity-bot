@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
+.fieldWrapper {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+    max-width: 358px;
+}
+
+.label {
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 17px;
+}
+
+.input,
+.select {
+    height: 52px;
+    max-height: 52px;
+    max-width: 358px;
+    width: 100%;
+    padding: 0 14px;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 8px;
+    color: rgba(0, 0, 0, 0.4);
+    appearance: none;
+    margin-bottom: 0;
+}
+
+.select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='10' height='7' viewBox='0 0 10 7' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23666' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 12px;
+}
+
+.input::placeholder,
+.select option:disabled {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.errorInput {
+    border: 1px solid #e66464;
+    background-color: #fff0f0;
+    color: rgba(249, 0, 6, 0.4);
+}
+
+.errorMessage {
+    color: rgba(255, 86, 89, 0.8);
+    font-size: 14px;
+    margin-top: 6px;
+}
