@@ -1,0 +1,1 @@
+﻿// Some tests for the RegisterUser module

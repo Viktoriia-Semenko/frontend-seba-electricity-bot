@@ -1,0 +1,1 @@
+﻿// Some RegisterDevice tests
