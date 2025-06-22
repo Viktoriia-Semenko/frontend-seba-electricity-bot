@@ -23,7 +23,7 @@ const DeviceHistorySchema = Type.Object({
 
 const DeviceStatusSchema = Type.Object({
     status: Type.Union([Type.Literal('ON'), Type.Literal('OFF'), Type.Literal('error')]),
-    timestamp: Type.String(),
+    lastChange: Type.String(),
 });
 
 export type DeviceRegisterResponseOk = Static<typeof DeviceRegisterResponseOkSchema>;
@@ -32,14 +32,14 @@ export type DeviceHistory = Static<typeof DeviceHistorySchema>;
 export type DeviceStatus = Static<typeof DeviceStatusSchema>;
 
 export const initDeviceModule = (fetchApi: typeof fetch) => {
-    const registerDevice = async (deviceId: string, token: string): Promise<DeviceRegisterResponseOk | DeviceRegisterResponseError> => {
+    const registerDevice = async (uuid: string, token: string): Promise<DeviceRegisterResponseOk | DeviceRegisterResponseError> => {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('cache-control', 'no-cache');
 
         const endpoint = `${endpointPrefix}/register`;
 
-        const body = JSON.stringify({ deviceId, token });
+        const body = JSON.stringify({ uuid, token });
 
         const response = await fetchApi(endpoint, {
             method: 'POST',
@@ -75,12 +75,12 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         const url = `${endpointPrefix}/status${query}`;
 
         const response = await fetchApi(url);
-        const data = await response.json();
 
         if (!response.ok) {
             throw new Error(`Failed to fetch device status: ${response.status} ${response.statusText}`);
         }
 
+        const data = await response.json();
         return convertToType(data, DeviceStatusSchema);
     };
 
