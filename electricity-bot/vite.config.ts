@@ -7,16 +7,14 @@ export default defineConfig({
   plugins: [react()],
   test: {
     projects: [
-      // 👇 UNIT tests
-      defineConfig({
+      defineConfig({ // unit tests
         test: {
           setupFiles: ['./.storybook/vitest.setup.ts'],
           include: ['src/**/*.test.ts'],
         },
       }),
 
-      // 👇 Storybook browser tests
-      defineConfig({
+      defineConfig({ // storybook browser tests
         plugins: [storybookTest({ configDir: '.storybook' })],
         test: {
           setupFiles: ['./.storybook/vitest.setup.ts'],
