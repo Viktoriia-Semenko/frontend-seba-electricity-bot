@@ -36,4 +36,32 @@ describe('clients module', () => {
 
         await expect(api.loginUser('lesya.ukrainka@mail.com', '123')).rejects.toThrow('Login failed');
     });
+
+    it('should throw error if response does not match UserSchema', async () => {
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({ invalid: 'data' }) // структура неправильна
+        });
+
+        await expect(api.loginUser('ivan.franko@example.com', 'qwerty'))
+            .rejects.toThrow('Data is not valid');
+    });
+
+    it('should throw error if token field is missing in response', async () => {
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({
+                id: '1',
+                firstName: 'Ivan',
+                lastName: 'Franko',
+                email: 'ivan.franko@example.com',
+                gender: 'male'
+                // відсутній token
+            })
+        });
+
+        await expect(api.loginUser('ivan.franko@example.com', 'qwerty'))
+            .rejects.toThrow('Data is not valid');
+    });
+
 });

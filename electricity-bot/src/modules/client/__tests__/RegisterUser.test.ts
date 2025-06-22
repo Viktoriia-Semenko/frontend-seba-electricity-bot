@@ -50,4 +50,36 @@ describe('registerUser', () => {
             })
         ).rejects.toThrow('Registration failed');
     });
+
+    it('should throw error if email is already registered', async () => {
+        mockFetch.mockResolvedValueOnce({ ok: false, status: 409 });
+
+        await expect(api.registerUser({
+            firstName: 'Ivan',
+            lastName: 'Franko',
+            email: 'ivan.franko@example.com',
+            password: '123',
+            gender: 'male'
+        })).rejects.toThrow('Registration failed');
+    });
+
+    it('should throw error if server returns invalid JSON structure', async () => {
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({
+                id: '1',
+                firstName: 'Ivan'
+                // немає lastName, email, token
+            })
+        });
+
+        await expect(api.registerUser({
+            firstName: 'Ivan',
+            lastName: 'Franko',
+            email: 'ivan.franko@example.com',
+            password: '123',
+            gender: 'male'
+        })).rejects.toThrow(/Data is not valid/i);
+    });
+
 });
