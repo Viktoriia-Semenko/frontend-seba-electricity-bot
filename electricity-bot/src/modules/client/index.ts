@@ -57,6 +57,30 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         return convertToType(data, UserSchema);
     };
 
+    const getCurrentUser = async (): Promise<User> => {
+        const token = getToken();
+        if (!token) throw new Error('No token found');
+
+        const response = await fetchAPI('/api/user/me', {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch current user');
+        }
+
+        const data = await response.json();
+
+        try {
+            return convertToType(data, UserSchema);
+        } catch {
+            throw new Error('Data is not valid');
+        }
+    };
+
     const saveToken = (token: string) => {
         localStorage.setItem(SESSION_KEY, token);
     };
@@ -74,6 +98,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         registerUser,
         saveToken,
         getToken,
-        removeToken
+        removeToken,
+        getCurrentUser
     };
 };
