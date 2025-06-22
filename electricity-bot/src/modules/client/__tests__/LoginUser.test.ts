@@ -10,7 +10,9 @@ const mockUser = {
     lastName: 'Shevchenko',
     email: 'taras.shevchenko@example.com',
     gender: 'male',
-    token: 'abc123'
+    token: 'abc123',
+    avatar: 'https://example.com/avatar.png',
+    timeZone: 'UTC+2'
 };
 
 describe('clients module', () => {

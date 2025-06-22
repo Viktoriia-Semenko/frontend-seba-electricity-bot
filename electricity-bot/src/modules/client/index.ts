@@ -8,7 +8,9 @@ const UserSchema = Type.Object({
     lastName: Type.String(),
     email: Type.String(),
     gender: Type.String(),
-    token: Type.String()
+    token: Type.String(),
+    avatar: Type.Optional(Type.String()),
+    timeZone: Type.Optional(Type.String()),
 });
 
 export type User = Static<typeof UserSchema>

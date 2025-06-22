@@ -58,4 +58,30 @@ describe('getCurrentUser', () => {
 
         await expect(api.getCurrentUser()).rejects.toThrow('Data is not valid');
     });
+
+    it('should return user with avatar and timeZone if present', async () => {
+        const mockUser = {
+            id: '1',
+            firstName: 'Taras',
+            lastName: 'Shevchenko',
+            email: 'taras@example.com',
+            gender: 'male',
+            token: 'abc123',
+            avatar: 'https://example.com/avatar.png',
+            timeZone: 'UTC+2',
+        };
+
+        localStorage.setItem('bot-session', 'abc123');
+
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => mockUser,
+        });
+
+        const user = await api.getCurrentUser();
+
+        expect(user.avatar).toBe('https://example.com/avatar.png');
+        expect(user.timeZone).toBe('UTC+2');
+    });
+
 });
