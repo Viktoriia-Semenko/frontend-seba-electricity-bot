@@ -61,11 +61,12 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         const url = `${endpointPrefix}${query}`;
 
         const response = await fetchApi(url);
-        const data = await response.json();
 
         if (!response.ok) {
             throw new Error(`Failed to fetch device history: ${response.status} ${response.statusText}`);
         }
+
+        const data = await response.json();
 
         return convertToType(data, DeviceHistorySchema);
     };
