@@ -1,6 +1,6 @@
 import { Type } from '@sinclair/typebox';
 import type { Static } from '@sinclair/typebox';
-import { convertToType } from './convertToType';
+import { convertToType } from '../convertToType';
 
 const UserSchema = Type.Object({
     id: Type.String(),

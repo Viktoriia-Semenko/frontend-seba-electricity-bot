@@ -1,6 +1,6 @@
-import { TypeCompiler } from '@sinclair/typebox/compiler';
-import type { Static, TSchema } from '@sinclair/typebox';
-import { schemaErrorToError } from './schemaErrorToError';
+﻿import type {Static, TSchema} from '@sinclair/typebox';
+import {TypeCompiler} from '@sinclair/typebox/compiler';
+import {schemaErrorToError} from './schemaErrorToError';
 
 export const convertToType = <T extends TSchema>(data: unknown, schema: T): Static<T> => {
     const Compiler = TypeCompiler.Compile(schema);
