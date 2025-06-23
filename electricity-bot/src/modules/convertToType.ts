@@ -1,4 +1,4 @@
-﻿import {Static, TSchema} from '@sinclair/typebox';
+﻿import type {Static, TSchema} from '@sinclair/typebox';
 import {TypeCompiler} from '@sinclair/typebox/compiler';
 import {schemaErrorToError} from './schemaErrorToError';
 
