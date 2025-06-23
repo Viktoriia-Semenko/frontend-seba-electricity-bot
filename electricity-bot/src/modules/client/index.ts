@@ -13,19 +13,26 @@ const UserSchema = Type.Object({
     timeZone: Type.Optional(Type.String()),
 });
 
+export const LoginRequestSchema = Type.Object({
+    username: Type.String(),
+    password: Type.String()
+});
+
+export type LoginRequest = Static<typeof LoginRequestSchema>;
+
 export type User = Static<typeof UserSchema>
 
 export const initUserAPI = (fetchAPI: typeof fetch) => {
 
     const SESSION_KEY = 'bot-session';
 
-    const loginUser = async (email: string, password: string): Promise<User> => {
-        const response = await fetchAPI(`/api/login`, { // тут буде реальне посилання
+    const loginUser = async (credentials: LoginRequest): Promise<User> => {
+        const response = await fetchAPI(`/api/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify(credentials)
         });
 
         if (!response.ok) {
@@ -43,7 +50,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         password: string;
         gender: string;
     }): Promise<User> => {
-        const response = await fetchAPI(`/api/register`, { // тут буде реальне посилання
+        const response = await fetchAPI(`/api/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

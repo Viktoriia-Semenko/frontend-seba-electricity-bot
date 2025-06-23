@@ -42,7 +42,7 @@ describe('clients module', () => {
     it('should throw error if response does not match UserSchema', async () => {
         mockFetch.mockResolvedValueOnce({
             ok: true,
-            json: async () => ({ invalid: 'data' }) // структура неправильна
+            json: async () => ({ invalid: 'data' })
         });
 
         await expect(api.loginUser('ivan.franko@example.com', 'qwerty'))
@@ -58,7 +58,6 @@ describe('clients module', () => {
                 lastName: 'Franko',
                 email: 'ivan.franko@example.com',
                 gender: 'male'
-                // відсутній token
             })
         });
 
