@@ -1,7 +1,6 @@
-﻿import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { initUserAPI } from '../index';
+﻿import { initUserAPI } from '../index';
 
-const mockFetch = vi.fn();
+const mockFetch = jest.fn();
 const api = initUserAPI(mockFetch);
 
 const mockUser = {

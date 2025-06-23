@@ -1,7 +1,6 @@
 import { initUserAPI } from '../index';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const mockFetch = vi.fn();
+const mockFetch = jest.fn();
 const api = initUserAPI(mockFetch);
 
 describe('token utilities', () => {

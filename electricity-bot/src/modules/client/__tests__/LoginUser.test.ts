@@ -1,7 +1,6 @@
 import { initUserAPI } from '../index';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const mockFetch = vi.fn();
+const mockFetch = jest.fn();
 const api = initUserAPI(mockFetch);
 
 const mockUser = {
@@ -27,7 +26,7 @@ describe('clients module', () => {
             json: async () => mockUser
         });
 
-        const user = await api.loginUser('taras.shevchenko@example.com', 'password123');
+        const user = await api.loginUser({username: 'taras.shevchenko@example.com', password: 'password123'});
 
         expect(user.email).toBe('taras.shevchenko@example.com');
         expect(mockFetch).toHaveBeenCalledWith('/api/login', expect.anything());
@@ -36,16 +35,16 @@ describe('clients module', () => {
     it('should throw error if login fails', async () => {
         mockFetch.mockResolvedValueOnce({ ok: false, status: 401 });
 
-        await expect(api.loginUser('lesya.ukrainka@mail.com', '123')).rejects.toThrow('Login failed');
+        await expect(api.loginUser({username: 'lesya.ukrainka@mail.com', password: '123'})).rejects.toThrow('Login failed');
     });
 
     it('should throw error if response does not match UserSchema', async () => {
         mockFetch.mockResolvedValueOnce({
             ok: true,
-            json: async () => ({ invalid: 'data' })
+            json: async () => ({ invalid: 'data' }),
         });
 
-        await expect(api.loginUser('ivan.franko@example.com', 'qwerty'))
+        await expect(api.loginUser({username: 'ivan.franko@example.com', password: 'qwerty'}))
             .rejects.toThrow('Data is not valid');
     });
 
@@ -61,8 +60,7 @@ describe('clients module', () => {
             })
         });
 
-        await expect(api.loginUser('ivan.franko@example.com', 'qwerty'))
+        await expect(api.loginUser({username: 'ivan.franko@example.com', password: 'qwerty'}))
             .rejects.toThrow('Data is not valid');
     });
-
 });

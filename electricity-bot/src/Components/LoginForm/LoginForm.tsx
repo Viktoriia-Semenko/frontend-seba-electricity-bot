@@ -3,7 +3,7 @@ import { Form, Input } from 'antd';
 import {SignButton} from "../SignButton/SignButton.tsx";
 
 interface LoginFormProps {
-    onSub: React.FormEventHandler<HTMLFormElement>;
+    onSub: (values: { username: string; password: string }) => void;
     isDisabled?: boolean;
     registerUrl?: string;
 }
