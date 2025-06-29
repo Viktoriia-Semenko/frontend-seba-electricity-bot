@@ -1,6 +1,7 @@
 ﻿import styles from './LoginForm.module.css'
 import { Form, Input } from 'antd';
 import {SignButton} from "../SignButton/SignButton.tsx";
+import { Link } from 'react-router-dom';
 
 interface LoginFormProps {
     onSub: (values: { username: string; password: string }) => void;
@@ -9,7 +10,7 @@ interface LoginFormProps {
 }
 
 
-export const LoginForm : React.FC<LoginFormProps> = ({isDisabled = false, onSub, registerUrl = "#"} : LoginFormProps) => {
+export const LoginForm : React.FC<LoginFormProps> = ({isDisabled = false, onSub} : LoginFormProps) => {
     const onFinishFailed = () => {
         console.error("Form submission failed");
     }
@@ -40,7 +41,9 @@ export const LoginForm : React.FC<LoginFormProps> = ({isDisabled = false, onSub,
 
             <Form.Item
             style={{marginTop:10, marginBottom: 0, textAlign: 'center'}}>
-                <p>Or <a href={registerUrl}>Register now!</a></p>
+                <p className={styles.privacyPolicy}>
+                    Or <Link to="/register" className={styles.link}>Register now!</Link>
+                </p>
             </Form.Item>
                 
         </Form>
