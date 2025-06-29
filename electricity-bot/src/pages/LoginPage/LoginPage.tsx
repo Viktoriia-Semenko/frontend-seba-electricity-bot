@@ -3,7 +3,7 @@ import { LoginForm } from '../../Components/LoginForm/LoginForm';
 import { Header } from '../../Components/Header/Header';
 import { useNavigate } from 'react-router-dom';
 import { initUserAPI } from '../../modules/client';
-import appPreview from './phone.png';
+import appPreview from '../images/phone.png';
 import { useState } from 'react';
 
 const api = initUserAPI(fetch);
