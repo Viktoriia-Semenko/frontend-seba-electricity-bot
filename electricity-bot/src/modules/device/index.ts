@@ -26,20 +26,23 @@ const DeviceStatusSchema = Type.Object({
     lastChange: Type.String(),
 });
 
+const DeviceDeleteResponseSchema = Type.Object({});
+
 export type DeviceRegisterResponseOk = Static<typeof DeviceRegisterResponseOkSchema>;
 export type DeviceRegisterResponseError = Static<typeof DeviceRegisterResponseErrorSchema>;
 export type DeviceHistory = Static<typeof DeviceHistorySchema>;
 export type DeviceStatus = Static<typeof DeviceStatusSchema>;
+export type DeviceDelete = Static<typeof DeviceDeleteResponseSchema>;
 
 export const initDeviceModule = (fetchApi: typeof fetch) => {
-    const registerDevice = async (uuid: string, token: string): Promise<DeviceRegisterResponseOk | DeviceRegisterResponseError> => {
+    const registerDevice = async (uuid: string): Promise<DeviceRegisterResponseOk | DeviceRegisterResponseError> => {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('cache-control', 'no-cache');
 
         const endpoint = `${endpointPrefix}/register`;
 
-        const body = JSON.stringify({ uuid, token });
+        const body = JSON.stringify({ uuid });
 
         const response = await fetchApi(endpoint, {
             method: 'POST',
@@ -85,9 +88,34 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         return convertToType(data, DeviceStatusSchema);
     };
 
+    const deleteDevice = async (deviceId: string): Promise<DeviceDelete> => {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('cache-control', 'no-cache');
+
+        const endpoint = `${endpointPrefix}/delete`;
+
+        const body = JSON.stringify({ uuid: deviceId });
+
+        const response = await fetchApi(endpoint, {
+            method: 'DELETE',
+            headers,
+            body
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete device: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        return convertToType(data, DeviceDeleteResponseSchema);
+    }
+
     return {
         registerDevice,
         getDeviceHistory,
         getDeviceStatus,
+        deleteDevice
     };
 }

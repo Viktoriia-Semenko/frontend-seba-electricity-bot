@@ -4,7 +4,6 @@ import type { DeviceRegisterResponseOk, DeviceRegisterResponseError } from "../i
 describe('Register Device', () => {
     const body = {
         uuid: 'test-device-id',
-        token: 'test-token',
     };
 
     const mockedFetch = jest.fn().mockImplementation(() => {
@@ -12,7 +11,8 @@ describe('Register Device', () => {
             status: 200,
             headers: {
                 'Content-Type': 'application/json',
-                'Cache-Control': 'no-cache'
+                'Cache-Control': 'no-cache',
+                'Authorization': 'Bearer test-token'
             }
         })
     });
@@ -25,11 +25,12 @@ describe('Register Device', () => {
             status: 200,
             headers: {
                 'Content-Type': 'application/json',
-                'Cache-Control': 'no-cache'
+                'Cache-Control': 'no-cache',
+                'Authorization': 'Bearer test-token'
             }
         }));
 
-        const response = await api.registerDevice(body.uuid, body.token);
+        const response = await api.registerDevice(body.uuid);
         expect(response).toEqual(okPayload);
         expect(response).toHaveProperty('message', 'Successfully registered');
     });
@@ -40,18 +41,36 @@ describe('Register Device', () => {
             status: 403,
             headers: {
                 'Content-Type': 'application/json',
-                'Cache-Control': 'no-cache'
+                'Cache-Control': 'no-cache',
+                'Authorization': 'Bearer test-token'
             }
         }));
 
-        await expect(api.registerDevice(body.uuid, body.token))
+        await expect(api.registerDevice(body.uuid))
             .rejects.toThrow('Failed to register device: 403');
     });
 
     it('should throw an error on network failure', async () => {
         mockedFetch.mockRejectedValueOnce(new Error('Network Error'));
 
-        await expect(api.registerDevice(body.uuid, body.token))
+        await expect(api.registerDevice(body.uuid))
             .rejects.toThrow('Network Error');
+    });
+
+    it('should trow an error if no token is provided', async () => {
+        const noTokenFetch = jest.fn().mockImplementation(() => {
+            return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+                status: 401,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            });
+        });
+
+        const noTokenApi = initDeviceModule(noTokenFetch);
+
+        await expect(noTokenApi.registerDevice(body.uuid))
+            .rejects.toThrow('Failed to register device: 401');
     });
 })
