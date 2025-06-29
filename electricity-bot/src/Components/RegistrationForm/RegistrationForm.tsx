@@ -3,15 +3,16 @@ import type {FormEventHandler} from 'react';
 import styles from './RegistrationForm.module.css';
 import {Header} from "../Header/Header.tsx";
 import {SignButton} from "../SignButton/SignButton.tsx";
+import { Link } from 'react-router-dom';
 
 type RegistrationFormProps = {
-    onSub:  FormEventHandler<HTMLFormElement>;
+    onSub: FormEventHandler<HTMLFormElement>;
     isDis?: boolean;
-    firstNameRef: React.RefObject<HTMLInputElement>;
-    lastNameRef: React.RefObject<HTMLInputElement>;
-    emailRef: React.RefObject<HTMLInputElement>;
-    genderRef: React.RefObject<HTMLSelectElement>;
-    passwordRef: React.RefObject<HTMLInputElement>;
+    firstNameRef: React.RefObject<HTMLInputElement | null>;
+    lastNameRef: React.RefObject<HTMLInputElement | null>;
+    emailRef: React.RefObject<HTMLInputElement | null>;
+    genderRef: React.RefObject<HTMLSelectElement | null>;
+    passwordRef: React.RefObject<HTMLInputElement | null>;
 };
 
 export const RegistrationForm: React.FC<RegistrationFormProps> = ({onSub, isDis, firstNameRef, lastNameRef, emailRef, genderRef, passwordRef}) => {
@@ -102,7 +103,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({onSub, isDis,
                 </div>
                 <div className={styles.btnContainer}>
                     <p className={styles.privacyPolicy}>
-                        Already have an account? <a href="/login" className={styles.link}>Login</a>
+                        Already have an account? <Link to="/login" className={styles.link}>Login</Link>
                     </p>
                     <SignButton htmlType={"submit"} title={'Sign up'} isDisabled={isDis} />
                 </div>
