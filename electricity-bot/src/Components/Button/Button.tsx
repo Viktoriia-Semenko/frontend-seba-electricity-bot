@@ -5,17 +5,17 @@ interface ButtonProps {
     title: string;
     onClick?: () => void;
     isDisabled?: boolean;
-    type?: 'default' | 'inverse';
+    type?: 'active' | 'inactive';
 }
 
-export const Button = ({ title, onClick, isDisabled, type = 'default' }: ButtonProps) => {
+export const Button = ({ title, onClick, isDisabled, type = 'inactive' }: ButtonProps) => {
     return (
         <button
             onClick={onClick}
             disabled={isDisabled}
             className={classNames(styles.btn, {
-                [styles.inverse]: type === 'inverse',
-                [styles.default]: type === 'default',
+                [styles.active]: type === 'active',
+                [styles.inactive]: type === 'inactive',
             })}
         >
             {title}
