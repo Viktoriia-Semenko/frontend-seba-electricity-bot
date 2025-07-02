@@ -1,6 +1,7 @@
 import { Type } from '@sinclair/typebox';
 import type { Static } from '@sinclair/typebox';
 import { convertToType } from '../convertToType';
+import { SESSION_KEY } from '../../constants/session';
 
 const UserSchema = Type.Object({
     id: Type.String(),
@@ -23,8 +24,6 @@ export type LoginRequest = Static<typeof LoginRequestSchema>;
 export type User = Static<typeof UserSchema>
 
 export const initUserAPI = (fetchAPI: typeof fetch) => {
-
-    const SESSION_KEY = 'bot-session';
 
     const loginUser = async (credentials: LoginRequest): Promise<User> => {
         const response = await fetchAPI(`/login`, {
