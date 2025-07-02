@@ -22,7 +22,7 @@ describe("Get Device ByUser", () => {
 
     const api = initDeviceModule(mockedFetch);
 
-    const responceFromServer = {
+    const responseFromServer = {
         devices: [
             { uuid: "device1-uuid", name: "Device One", status: "ON", lastChange: "2023-10-01T12:00:00Z" },
             { uuid: "device2-uuid", name: "Device Two", status: "ON", lastChange: "2023-10-01T12:00:00Z" },
@@ -31,7 +31,7 @@ describe("Get Device ByUser", () => {
 
     it("should fetch devices by user successfully", async () => {
         const userId = "test-user-id";
-        mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(responceFromServer), {
+        mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(responseFromServer), {
             status: 200,
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ describe("Get Device ByUser", () => {
         }));
 
         const response = await api.getDevicesByUser(userId);
-        expect(response.devices[0]).toEqual(responceFromServer.devices[0]);
+        expect(response.devices[0]).toEqual(responseFromServer.devices[0]);
     });
 
     it("should throw an error on network failure", async () => {
