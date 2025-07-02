@@ -4,7 +4,16 @@ import type { DeviceRegisterResponseOk, DeviceRegisterResponseError } from "../i
 describe('Register Device', () => {
     const body = {
         uuid: 'test-device-id',
+        name: 'Test Device'
     };
+
+    beforeEach(() => {
+        localStorage.setItem('bot-session', 'test-token');
+    })
+
+    afterEach(() => {
+        localStorage.clear();
+    });
 
     const mockedFetch = jest.fn().mockImplementation(() => {
         return new Response (JSON.stringify(body), {
@@ -30,7 +39,7 @@ describe('Register Device', () => {
             }
         }));
 
-        const response = await api.registerDevice(body.uuid);
+        const response = await api.registerDevice(body.uuid, body.name);
         expect(response).toEqual(okPayload);
         expect(response).toHaveProperty('message', 'Successfully registered');
     });
@@ -46,14 +55,14 @@ describe('Register Device', () => {
             }
         }));
 
-        await expect(api.registerDevice(body.uuid))
+        await expect(api.registerDevice(body.uuid, body.name))
             .rejects.toThrow('Failed to register device: 403');
     });
 
     it('should throw an error on network failure', async () => {
         mockedFetch.mockRejectedValueOnce(new Error('Network Error'));
 
-        await expect(api.registerDevice(body.uuid))
+        await expect(api.registerDevice(body.uuid, body.name))
             .rejects.toThrow('Network Error');
     });
 
@@ -70,7 +79,7 @@ describe('Register Device', () => {
 
         const noTokenApi = initDeviceModule(noTokenFetch);
 
-        await expect(noTokenApi.registerDevice(body.uuid))
+        await expect(noTokenApi.registerDevice(body.uuid, body.name))
             .rejects.toThrow('Failed to register device: 401');
     });
 })
