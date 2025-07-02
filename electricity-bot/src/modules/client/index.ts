@@ -27,7 +27,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
     const SESSION_KEY = 'bot-session';
 
     const loginUser = async (credentials: LoginRequest): Promise<User> => {
-        const response = await fetchAPI(`/api/login`, {
+        const response = await fetchAPI(`/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         password: string;
         gender: string;
     }): Promise<User> => {
-        const response = await fetchAPI(`/api/register`, {
+        const response = await fetchAPI(`/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -70,7 +70,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         const token = getToken();
         if (!token) throw new Error('No token found');
 
-        const response = await fetchAPI('/api/user/me', {
+        const response = await fetchAPI('/user/me', {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
