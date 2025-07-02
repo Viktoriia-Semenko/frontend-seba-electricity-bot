@@ -28,21 +28,43 @@ const DeviceStatusSchema = Type.Object({
 
 const DeviceDeleteResponseSchema = Type.Object({});
 
+const DeviceGetByUserResponseSchema = Type.Object({
+    devices: Type.Array(
+        Type.Object({
+            uuid: Type.String(),
+            name: Type.Optional(Type.String()),
+            status: Type.Union([Type.Literal('ON'), Type.Literal('OFF'), Type.Literal('error')]),
+            lastChange: Type.String(),
+        })
+    )
+});
+
 export type DeviceRegisterResponseOk = Static<typeof DeviceRegisterResponseOkSchema>;
 export type DeviceRegisterResponseError = Static<typeof DeviceRegisterResponseErrorSchema>;
 export type DeviceHistory = Static<typeof DeviceHistorySchema>;
 export type DeviceStatus = Static<typeof DeviceStatusSchema>;
 export type DeviceDelete = Static<typeof DeviceDeleteResponseSchema>;
+export type DeviceGetByUserResponse = Static<typeof DeviceGetByUserResponseSchema>;
+
+const requireAuthToken = (): string => {
+    const token = localStorage.getItem('bot-session');
+    if (!token) {
+        throw new Error('Authentication token is required');
+    }
+    return token;
+}
 
 export const initDeviceModule = (fetchApi: typeof fetch) => {
-    const registerDevice = async (uuid: string): Promise<DeviceRegisterResponseOk | DeviceRegisterResponseError> => {
+    const registerDevice = async (uuid: string, name:string): Promise<DeviceRegisterResponseOk | DeviceRegisterResponseError> => {
+        const token = requireAuthToken();
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('cache-control', 'no-cache');
+        headers.append('Authorization', `Bearer ${token}`);
 
         const endpoint = `${endpointPrefix}/register`;
 
-        const body = JSON.stringify({ uuid });
+        const body = JSON.stringify({ uuid, name });
 
         const response = await fetchApi(endpoint, {
             method: 'POST',
@@ -59,6 +81,11 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
     };
 
     const getDeviceHistory = async (deviceId: string): Promise<DeviceHistory> => {
+        const token = requireAuthToken();
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('cache-control', 'no-cache');
+        headers.append('Authorization', `Bearer ${token}`);
 
         const query = `?uuid=${encodeURIComponent(deviceId)}`;
         const url = `${endpointPrefix}${query}`;
@@ -75,6 +102,12 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
     };
 
     const getDeviceStatus = async (deviceId: string): Promise<DeviceStatus> => {
+        const token = requireAuthToken();
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('cache-control', 'no-cache');
+        headers.append('Authorization', `Bearer ${token}`);
+
         const query = `?uuid=${encodeURIComponent(deviceId)}`;
         const url = `${endpointPrefix}/status${query}`;
 
@@ -89,9 +122,11 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
     };
 
     const deleteDevice = async (deviceId: string): Promise<DeviceDelete> => {
+        const token = requireAuthToken();
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('cache-control', 'no-cache');
+        headers.append('Authorization', `Bearer ${token}`);
 
         const endpoint = `${endpointPrefix}/delete`;
 
@@ -112,10 +147,34 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         return convertToType(data, DeviceDeleteResponseSchema);
     }
 
+    const getDevicesByUser = async (email: string): Promise<DeviceGetByUserResponse> => {
+        const token = requireAuthToken();
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('cache-control', 'no-cache');
+        headers.append('Authorization', `Bearer ${token}`);
+
+        const query = `?email=${encodeURIComponent(email)}`;
+        const url = `${endpointPrefix}${query}`;
+
+        const response = await fetchApi(url, {
+            method: 'GET',
+            headers
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch devices by user: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return convertToType(data, DeviceGetByUserResponseSchema);
+    }
+
     return {
         registerDevice,
         getDeviceHistory,
         getDeviceStatus,
-        deleteDevice
+        deleteDevice,
+        getDevicesByUser
     };
 }

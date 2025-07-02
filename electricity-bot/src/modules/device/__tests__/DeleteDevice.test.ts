@@ -1,6 +1,15 @@
 ﻿import {initDeviceModule} from "../index";
 
 describe("DeleteDevice", () => {
+
+    beforeEach(() => {
+        localStorage.setItem('bot-session', 'test-token');
+    })
+
+    afterEach(() => {
+        localStorage.clear();
+    });
+
     const mockedFetch = jest.fn().mockImplementation(() => {
         return new Response(JSON.stringify({}), {
             status: 200,

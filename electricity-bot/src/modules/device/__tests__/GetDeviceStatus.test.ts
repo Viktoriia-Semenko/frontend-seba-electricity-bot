@@ -2,6 +2,15 @@
 import type {DeviceHistory} from "../index";
 
 describe('Get Device History', () => {
+
+    beforeEach(() => {
+        localStorage.setItem('bot-session', 'test-token');
+    })
+
+    afterEach(() => {
+        localStorage.clear();
+    });
+
     const mockedFetch = jest.fn().mockImplementation(() => {
         return new Response(JSON.stringify([]), {
             status: 200,
