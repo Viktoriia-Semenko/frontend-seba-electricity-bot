@@ -2,7 +2,7 @@ import type {Static} from '@sinclair/typebox';
 import {Type} from '@sinclair/typebox';
 import {convertToType} from '../convertToType';
 
-const endpointPrefix = '/device';
+const endpointPrefix = '/devices';
 
 const DeviceRegisterResponseOkSchema = Type.Object({
     message: Type.String(),
