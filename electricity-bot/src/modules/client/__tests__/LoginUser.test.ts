@@ -29,7 +29,7 @@ describe('clients module', () => {
         const user = await api.loginUser({username: 'taras.shevchenko@example.com', password: 'password123'});
 
         expect(user.email).toBe('taras.shevchenko@example.com');
-        expect(mockFetch).toHaveBeenCalledWith('/api/login', expect.anything());
+        expect(mockFetch).toHaveBeenCalledWith('/login', expect.anything());
     });
 
     it('should throw error if login fails', async () => {
