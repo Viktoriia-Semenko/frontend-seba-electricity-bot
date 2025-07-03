@@ -1,0 +1,14 @@
+.phoneZone {
+    flex: 0 0 50%;
+    background-color: #D5D5D5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 360px;
+    max-width: 756px;
+}
+
+.phoneImage {
+    height: 90%;
+    object-fit: contain;
+}
