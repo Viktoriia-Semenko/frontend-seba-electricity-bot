@@ -13,14 +13,14 @@ type Story = StoryObj<typeof Button>;
 export const Default: Story = {
     args: {
         title: 'Home',
-        type: 'default',
+        type: 'active',
     },
 };
 
 export const Inverse: Story = {
     args: {
         title: 'Settings',
-        type: 'inverse',
+        type: 'inactive',
     },
 };
 

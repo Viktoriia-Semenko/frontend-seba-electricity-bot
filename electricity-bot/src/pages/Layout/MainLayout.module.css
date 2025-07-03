@@ -1,0 +1,43 @@
+.wrapper {
+    display: flex;
+    height: 100vh;
+    background-color: #272C30;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+}
+
+.sidebar {
+    width: 303px;
+    min-width: 303px;
+    background-color: #272C30;
+    padding: 44px 44px 30px 44px;
+    box-sizing: border-box;
+    border-right: 1px solid #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+}
+
+.userCard {
+    margin-bottom: 100px;
+}
+
+.content {
+    flex: 1;
+    padding: 70px 40px 40px 100px;
+    box-sizing: border-box;
+}
+
+.header {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 38px;
+    color: white;
+    margin-top: 10px;
+}
