@@ -3,7 +3,7 @@ import { LoginForm } from '../../Components/LoginForm/LoginForm';
 import { Header } from '../../Components/Header/Header';
 import { useNavigate } from 'react-router-dom';
 import { initUserAPI } from '../../modules/client';
-import appPreview from '../images/phone.png';
+import { AppPreview } from '../../Components/AppPreview/AppPreview';
 import { useState } from 'react';
 
 const api = initUserAPI(fetch);
@@ -27,9 +27,7 @@ export const LoginPage = () => {
 
     return (
         <div className={styles.wrapper}>
-            <div className={styles.phoneZone}>
-                <img src={appPreview} alt="App preview" className={styles.phoneImage} />
-            </div>
+            <AppPreview />
             <div className={styles.loginZone}>
                 <div className={styles.header}>
                     <Header title="Login" pageType="login" />

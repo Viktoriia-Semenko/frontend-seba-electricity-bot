@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { RegistrationForm } from '../../Components/RegistrationForm/RegistrationForm';
 import { useNavigate } from 'react-router-dom';
 import { initUserAPI } from '../../modules/client';
-import appPreview from '../images/phone.png';
+import appPreview from '../../Components/AppPreview/phone.png';
 
 const api = initUserAPI(fetch);
 
