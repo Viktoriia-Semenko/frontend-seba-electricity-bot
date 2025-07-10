@@ -5,12 +5,14 @@ import { useNavigate } from 'react-router-dom';
 import { initUserAPI } from '../../modules/client';
 import { AppPreview } from '../../Components/AppPreview/AppPreview';
 import { useState } from 'react';
+import { useUserContext } from '../../context/UserContext';
 
 const api = initUserAPI(fetch);
 
 export const LoginPage = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const { setUser } = useUserContext();
 
     const handleLogin = async (values: { username: string; password: string }) => {
         setLoading(true);

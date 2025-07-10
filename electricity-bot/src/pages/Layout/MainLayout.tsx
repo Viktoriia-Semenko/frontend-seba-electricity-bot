@@ -4,43 +4,55 @@ import { Button } from '../../Components/Button/Button';
 import { Header } from '../../Components/Header/Header';
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useUserContext } from '../../context/UserContext';
 
 interface MainLayoutProps {
     children: ReactNode;
     page: 'home' | 'history' | 'settings';
 }
 
-interface User {
-    name: string;
-    surname: string;
-    gender: 'male' | 'female' | 'other';
-}
-
 export const MainLayout = ({ children, page }: MainLayoutProps) => {
     const navigate = useNavigate();
-    const [user, setUser] = useState<User | null>(null);
+    const { user, setUser } = useUserContext();
 
     useEffect(() => {
         const token = localStorage.getItem('bot-session');
-
         if (!token) {
             navigate('/login');
             return;
         }
 
-        // until there is no backend then fetch will be changed
         const fetchUser = async () => {
-            await new Promise((resolve) => setTimeout(resolve, 300));
-            setUser({
-                name: 'Test',
-                surname: 'User',
-                gender: 'female',
-            });
+            try {
+                const res = await fetch('http://localhost:8080/user/me', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (!res.ok) {
+                    throw new Error('Unauthorized');
+                }
+
+                const data = await res.json();
+
+                setUser({
+                    name: data.firstName,
+                    surname: data.lastName,
+                    gender: data.gender || 'other',
+                });
+            } catch (err) {
+                console.error('Auth error:', err);
+                localStorage.removeItem('bot-session');
+                navigate('/login');
+            }
         };
 
-        fetchUser();
-    }, [navigate]);
+        if (!user) {
+            fetchUser();
+        }
+    }, [navigate, setUser, user]);
 
     if (!user) return null;
 
