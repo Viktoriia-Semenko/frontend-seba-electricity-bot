@@ -1,12 +1,76 @@
-﻿.loginInput {
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.form {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.email {
+    margin-bottom: 47px;
+}
+
+.password {
+    margin-bottom: 36px;
+}
+
+.input {
     padding: 20px 40px;
+    max-width: 424px;
+    width: 100%;
     border-radius: 36px;
+    font-family: 'Inter', sans-serif;
     font-size: 16px;
-    color: #000000;
     border: 1px solid black;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+option {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #BCBCBC;
+}
+
+.select {
+    padding: 20px 40px;
+    max-width: 424px;
+    width: 100%;
+    border-radius: 36px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #BCBCBC;
+    border: 1px solid black;
+    background-color: #ffffff;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+p {
+    color: #565555;
+    margin-bottom: 35px;
 }
 
 a {
-    color: #565555;
-    text-decoration:  underline #565555;
+    text-decoration-line: underline;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000000;
+}
+
+.input::placeholder {
+    color: #BCBCBC;
+}
+
+.select option[value=""] {
+    color: #BCBCBC;
+}
+
+.error {
+    color: #FF6B6B;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: 10px;
 }

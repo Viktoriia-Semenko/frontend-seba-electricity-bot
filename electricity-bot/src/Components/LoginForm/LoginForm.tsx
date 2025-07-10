@@ -1,51 +1,72 @@
-﻿import styles from './LoginForm.module.css'
-import { Form, Input } from 'antd';
+﻿import React from 'react';
+import type {FormEventHandler} from 'react';
+import styles from './LoginForm.module.css';
 import {SignButton} from "../SignButton/SignButton.tsx";
 import { Link } from 'react-router-dom';
 
-interface LoginFormProps {
-    onSub: (values: { username: string; password: string }) => void;
-    isDisabled?: boolean;
-    registerUrl?: string;
-}
+type RegistrationFormProps = {
+    onSub: FormEventHandler<HTMLFormElement>;
+    isDis?: boolean;
+    emailRef: React.RefObject<HTMLInputElement | null>;
+    passwordRef: React.RefObject<HTMLInputElement | null>;
+};
 
+export const LoginForm: React.FC<RegistrationFormProps> = ({onSub, isDis, emailRef, passwordRef}) => {
+    const [emailError, setEmailError] = React.useState<string>('');
+    const [passwordError, setPasswordError] = React.useState<string>('');
 
-export const LoginForm : React.FC<LoginFormProps> = ({isDisabled = false, onSub} : LoginFormProps) => {
-    const onFinishFailed = () => {
-        console.error("Form submission failed");
+    const validateForm = () => {
+        let isValid = true;
+
+        const email = emailRef.current?.value.trim() || '';
+        const password = passwordRef.current?.value.trim() || '';
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email || !emailRegex.test(email)) {
+            setEmailError('Email is required');
+            isValid = false;
+        }
+        else {
+            setEmailError('');
+        }
+
+        if (!password || password.length < 8) {
+            setPasswordError('Password must be at least 8 characters long');
+            isValid = false;
+        }
+        else {
+            setPasswordError('');
+        }
+
+        return isValid;
     }
-    return (
-        <Form
-            name="login"
-            initialValues={{remember: true}}
-            style={{justifyContent: "center", maxWidth: 424, width: '100%', margin: '0 auto'}}
-            onFinish={onSub}
-            onFinishFailed={onFinishFailed}
-        >
-            <Form.Item
-                style={{marginBottom: 47}}
-                name="username"
-                rules={[{required: true, message: 'Please input your Username!'}]}
-            >
-                <Input className={styles.loginInput} placeholder="Username"/>
-            </Form.Item>
-            <Form.Item
-                style={{marginBottom: 37}}
-                name="password"
-                rules={[{required: true, message: 'Please input your Password!'}]}
-            >
-                <Input className={styles.loginInput} type="password" placeholder="Password"/>
-            </Form.Item>
-            
-            <SignButton htmlType={"submit"} isDisabled={isDisabled} title={"Continue"} ></SignButton>
 
-            <Form.Item
-            style={{marginTop:10, marginBottom: 0, textAlign: 'center'}}>
-                <p className={styles.privacyPolicy}>
-                    Or <Link to="/register" className={styles.link}>Register now!</Link>
-                </p>
-            </Form.Item>
-                
-        </Form>
+    const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+        event.preventDefault();
+        if (validateForm()) {
+            onSub(event);
+        }
+    };
+
+    return (
+        <div className={styles.container}>
+            <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.email}>
+                    <input name="email" type="email" className={styles.input} ref={emailRef} placeholder={"Email"} />
+                    {emailError && <p className={styles.error}>* {emailError}</p>}
+                </div>
+                <div className={styles.password}>
+                    <input name="password" type="password" className={styles.input} ref={passwordRef} placeholder={"Password"} />
+                    {passwordError && <p className={styles.error}>* {passwordError}</p>}
+                </div>
+                <div className={styles.btnContainer}>
+                    <p className={styles.privacyPolicy}>
+                        Or register now <Link to="/register" className={styles.link}>Register</Link>
+                    </p>
+                    <SignButton htmlType={"submit"} title={'Sign up'} isDisabled={isDis} />
+                </div>
+            </form>
+        </div>
     );
-}
+};
