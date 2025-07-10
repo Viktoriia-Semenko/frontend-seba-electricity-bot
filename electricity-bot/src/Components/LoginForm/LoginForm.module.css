@@ -26,28 +26,6 @@
     color: #000000;
 }
 
-option {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    color: #BCBCBC;
-}
-
-.select {
-    padding: 20px 40px;
-    max-width: 424px;
-    width: 100%;
-    border-radius: 36px;
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    color: #BCBCBC;
-    border: 1px solid black;
-    background-color: #ffffff;
-
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-}
-
 p {
     color: #565555;
     margin-bottom: 35px;
