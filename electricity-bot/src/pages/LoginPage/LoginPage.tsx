@@ -5,13 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { initUserAPI } from '../../modules/client';
 import { AppPreview } from '../../Components/AppPreview/AppPreview';
 import {useRef, useState} from 'react';
+import { useUserContext } from '../../context/UserContext';
 
 const api = initUserAPI(fetch);
 
 export const LoginPage = () => {
     const navigate = useNavigate();
     const [isDisabled, setIsDisabled] = useState(false);
-
+    const { setUser } = useUserContext();
+        
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -27,7 +29,17 @@ export const LoginPage = () => {
 
             const user = await api.loginUser(payload);
             api.saveToken(user.token);
+
+            setUser({
+                name: user.firstName,
+                surname: user.lastName,
+                gender: ['male', 'female', 'other'].includes(user.gender)
+                    ? user.gender as 'male' | 'female' | 'other'
+                    : 'other',
+            });
+
             navigate('/home');
+
         } catch (error) {
             alert('Login failed: ' + (error as Error).message);
         } finally {
