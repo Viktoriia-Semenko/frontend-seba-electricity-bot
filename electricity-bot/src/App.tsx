@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { LoginPage } from './pages/LoginPage/LoginPage';
 import { RegisterPage } from './pages/RegisterPage/RegisterPage';
 import { MainLayout } from './pages/Layout/MainLayout';
+import { EmptyStatePage } from './pages/EmptyStatePage/EmptyStatePage';
 
 function App() {
     return (
@@ -14,7 +15,7 @@ function App() {
                     path="/"
                     element={
                         <MainLayout page="home">
-                            <p style={{ color: 'white' }}>Home content</p>
+                            <EmptyStatePage /> {}
                         </MainLayout>
                     }
                 />
