@@ -17,9 +17,29 @@ export const LoginPage = () => {
     const handleLogin = async (values: { username: string; password: string }) => {
         setLoading(true);
         try {
-            const user = await api.loginUser(values);
-            api.saveToken(user.token);
-            navigate('/home');
+            const response = await api.loginUser(values);
+
+            const token = response.token;
+            api.saveToken(token);
+            localStorage.setItem('bot-session', token);
+
+            const res = await fetch('http://localhost:8080/user/me', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!res.ok) throw new Error('Failed to fetch user');
+
+            const data = await res.json();
+
+            setUser({
+                name: data.firstName,
+                surname: data.lastName,
+                gender: data.gender || 'other',
+            });
+
+            navigate('/');
         } catch (error) {
             alert('Login failed: ' + (error as Error).message);
         } finally {
