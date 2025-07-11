@@ -6,6 +6,7 @@ import { initUserAPI } from '../../modules/client';
 import { AppPreview } from '../../Components/AppPreview/AppPreview';
 import {useRef, useState} from 'react';
 import { useUserContext } from '../../context/UserContext';
+import {Navigate} from "react-router-dom";
 
 const api = initUserAPI(fetch);
 
@@ -13,9 +14,13 @@ export const LoginPage = () => {
     const navigate = useNavigate();
     const [isDisabled, setIsDisabled] = useState(false);
     const { setUser } = useUserContext();
-        
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+
+    const token = localStorage.getItem('bot-session');
+    if (token) {
+        return <Navigate to="/home" replace />;
+    }
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

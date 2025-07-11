@@ -32,7 +32,10 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
                 });
 
                 if (!res.ok) {
-                    throw new Error('Unauthorized');
+                    console.error("Unauthorized access, redirecting to login.");
+                    localStorage.removeItem('bot-session');
+                    navigate('/login');
+                    return;
                 }
 
                 const data = await res.json();
@@ -70,7 +73,7 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
                     <Button
                         title="Home"
                         type={page === 'home' ? 'active' : 'inactive'}
-                        onClick={() => navigate('/')}
+                        onClick={() => navigate('/home')}
                     />
                     <Button
                         title="History"

@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { LoginPage } from './pages/LoginPage/LoginPage';
 import { RegisterPage } from './pages/RegisterPage/RegisterPage';
 import { MainLayout } from './pages/Layout/MainLayout';
-import { EmptyStatePage } from './pages/EmptyStatePage/EmptyStatePage';
+// import { EmptyStatePage } from './pages/EmptyStatePage/EmptyStatePage';
+import {MainPage} from "./pages/MainPage/MainPage.tsx";
 
 function App() {
     return (
@@ -12,12 +13,8 @@ function App() {
                 <Route path="/register" element={<RegisterPage />} />
 
                 <Route
-                    path="/"
-                    element={
-                        <MainLayout page="home">
-                            <EmptyStatePage /> {}
-                        </MainLayout>
-                    }
+                    path="/home"
+                    element={<MainPage />}
                 />
                 <Route
                     path="/history"
