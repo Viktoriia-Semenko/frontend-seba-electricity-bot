@@ -4,24 +4,34 @@ import { Header } from '../../Components/Header/Header';
 import { useNavigate } from 'react-router-dom';
 import { initUserAPI } from '../../modules/client';
 import { AppPreview } from '../../Components/AppPreview/AppPreview';
-import { useState } from 'react';
+import {useRef, useState} from 'react';
 
 const api = initUserAPI(fetch);
 
 export const LoginPage = () => {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
 
-    const handleLogin = async (values: { username: string; password: string }) => {
-        setLoading(true);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsDisabled(true);
+
         try {
-            const user = await api.loginUser(values);
+            const payload = {
+                username: emailRef.current?.value || '',
+                password: passwordRef.current?.value || '',
+            };
+
+            const user = await api.loginUser(payload);
             api.saveToken(user.token);
             navigate('/home');
         } catch (error) {
             alert('Login failed: ' + (error as Error).message);
         } finally {
-            setLoading(false);
+            setIsDisabled(false);
         }
     };
 
@@ -33,7 +43,7 @@ export const LoginPage = () => {
                     <Header title="Login" pageType="login" />
                 </div>
                 <div className={styles.formWrapper}>
-                    <LoginForm onSub={handleLogin} isDisabled={loading} />
+                    <LoginForm onSub={handleLogin} isDis={isDisabled} emailRef={emailRef} passwordRef={passwordRef} />
                 </div>
             </div>
         </div>

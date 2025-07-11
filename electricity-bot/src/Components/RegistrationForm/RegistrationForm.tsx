@@ -20,6 +20,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({onSub, isDis,
     const [lastNameError, setLastNameError] = React.useState<string>('');
     const [emailError, setEmailError] = React.useState<string>('');
     const [passwordError, setPasswordError] = React.useState<string>('');
+    const [genderError, setGenderError] = React.useState<string>('');
 
     const validateForm = () => {
         let isValid = true;
@@ -28,6 +29,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({onSub, isDis,
         const lastName = lastNameRef.current?.value.trim() || '';
         const email = emailRef.current?.value.trim() || '';
         const password = passwordRef.current?.value.trim() || '';
+        const gender = genderRef.current?.value || '';
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -45,6 +47,14 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({onSub, isDis,
         }
         else {
             setLastNameError('');
+        }
+
+        if (!gender) {
+            setGenderError('Gender is required');
+            isValid = false;
+        }
+        else {
+            setGenderError('');
         }
 
         if (!email || !emailRegex.test(email)) {
@@ -78,11 +88,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({onSub, isDis,
             <Header title={"Registration"} pageType={"login"} />
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.firstName}>
-                    <input type="text" className={styles.input} ref={firstNameRef} placeholder={"First Name"} />
+                    <input name="first-name" type="text" className={styles.input} ref={firstNameRef} placeholder={"First Name"} />
                     {firstNameError && <p className={styles.error}>* {firstNameError}</p>}
                 </div>
                 <div className={styles.lastName}>
-                    <input type="text" className={styles.input} ref={lastNameRef} placeholder={"Last Name"} />
+                    <input name="last-name" type="text" className={styles.input} ref={lastNameRef} placeholder={"Last Name"} />
                     {lastNameError && <p className={styles.error}>* {lastNameError}</p>}
                 </div>
                 <div className={styles.gender}>
@@ -92,13 +102,14 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({onSub, isDis,
                         <option value="female">Female</option>
                         <option value="other">Other</option>
                     </select>
+                    {genderError && <p className={styles.error}>* {genderError}</p>}
                 </div>
                 <div className={styles.email}>
-                    <input type="email" className={styles.input} ref={emailRef} placeholder={"Email"} />
+                    <input name="email" type="email" className={styles.input} ref={emailRef} placeholder={"Email"} />
                     {emailError && <p className={styles.error}>* {emailError}</p>}
                 </div>
                 <div className={styles.password}>
-                    <input type="password" className={styles.input} ref={passwordRef} placeholder={"Password"} />
+                    <input name="password" type="password" className={styles.input} ref={passwordRef} placeholder={"Password"} />
                     {passwordError && <p className={styles.error}>* {passwordError}</p>}
                 </div>
                 <div className={styles.btnContainer}>

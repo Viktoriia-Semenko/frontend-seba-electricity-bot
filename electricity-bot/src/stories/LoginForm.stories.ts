@@ -1,6 +1,15 @@
 ﻿import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { LoginForm } from '../Components/LoginForm/LoginForm.tsx';
+import React from "react";
+import {action} from "storybook/actions";
+
+const emailInput     = document.createElement('input');
+const passwordInput  = document.createElement('input');
+
+const emailRef:     React.RefObject<HTMLInputElement> = { current: emailInput };
+const passwordRef:  React.RefObject<HTMLInputElement> = { current: passwordInput };
+
 
 const meta = {
     title: 'Example/LoginForm',
@@ -10,8 +19,10 @@ const meta = {
         layout: 'fullscreen',
     },
     args: {
-        isDisabled: false,
-        registerUrl: "#"
+        onSub: action('onSubmit'),
+        isDis: false,
+        emailRef,
+        passwordRef
     }
 } satisfies Meta<typeof LoginForm>;
 
@@ -20,7 +31,8 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
     args: {
         onSub: () => {},
-        isDisabled: false,
-        registerUrl: "#"
+        isDis: false,
+        emailRef,
+        passwordRef
     }
 };
