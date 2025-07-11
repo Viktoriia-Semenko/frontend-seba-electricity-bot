@@ -4,46 +4,46 @@ import { Header } from '../../Components/Header/Header';
 import { useNavigate } from 'react-router-dom';
 import { initUserAPI } from '../../modules/client';
 import { AppPreview } from '../../Components/AppPreview/AppPreview';
-import { useState } from 'react';
+import {useRef, useState} from 'react';
 import { useUserContext } from '../../context/UserContext';
 
 const api = initUserAPI(fetch);
 
 export const LoginPage = () => {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
     const { setUser } = useUserContext();
 
-    const handleLogin = async (values: { username: string; password: string }) => {
-        setLoading(true);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsDisabled(true);
+
         try {
-            const response = await api.loginUser(values);
+            const payload = {
+                username: emailRef.current?.value || '',
+                password: passwordRef.current?.value || '',
+            };
 
-            const token = response.token;
-            api.saveToken(token);
-            localStorage.setItem('bot-session', token);
-
-            const res = await fetch('http://localhost:8080/user/me', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (!res.ok) throw new Error('Failed to fetch user');
-
-            const data = await res.json();
+            const user = await api.loginUser(payload);
+            api.saveToken(user.token);
 
             setUser({
-                name: data.firstName,
-                surname: data.lastName,
-                gender: data.gender || 'other',
+                name: user.firstName,
+                surname: user.lastName,
+                gender: ['male', 'female', 'other'].includes(user.gender)
+                    ? user.gender as 'male' | 'female' | 'other'
+                    : 'other',
             });
 
-            navigate('/');
+            navigate('/home');
+
         } catch (error) {
             alert('Login failed: ' + (error as Error).message);
         } finally {
-            setLoading(false);
+            setIsDisabled(false);
         }
     };
 
@@ -55,7 +55,7 @@ export const LoginPage = () => {
                     <Header title="Login" pageType="login" />
                 </div>
                 <div className={styles.formWrapper}>
-                    <LoginForm onSub={handleLogin} isDisabled={loading} />
+                    <LoginForm onSub={handleLogin} isDis={isDisabled} emailRef={emailRef} passwordRef={passwordRef} />
                 </div>
             </div>
         </div>

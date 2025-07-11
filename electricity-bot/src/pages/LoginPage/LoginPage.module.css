@@ -1,9 +1,7 @@
 .wrapper {
     display: flex;
-    height: 100vh;
     background-color: white;
     margin: 0 auto;
-    overflow: hidden;
 }
 
 .phoneZone {
