@@ -4,14 +4,14 @@ import femaleImage from './img/femal-user-image.png'
 import otherCardImage from './img/other-user-image.png'
 
 export interface UserCardProps {
-    name?: string;
-    surname?: string;
+    firstName?: string;
+    lastName?: string;
     image?: string;
     sex?: 'male' | 'female' | 'other';
     onClick?: () => void;
 }
 
-export const UserCard = ({ name, surname, sex = 'other', image, onClick }: UserCardProps) => {
+export const UserCard = ({ firstName, lastName, sex = 'other', image, onClick }: UserCardProps) => {
     const defaultImage =
         sex === 'male' ? userCardImage :
             sex === 'female' ? femaleImage : otherCardImage;
@@ -24,8 +24,8 @@ export const UserCard = ({ name, surname, sex = 'other', image, onClick }: UserC
                 alt="User"
             />
             <div className="user-name-container">
-                <p className="user-name">{name}</p>
-                <p className="user-surname">{surname}</p>
+                <p className="user-name">{firstName}</p>
+                <p className="user-surname">{lastName}</p>
             </div>
         </div>
     );

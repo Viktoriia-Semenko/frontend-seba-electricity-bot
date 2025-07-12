@@ -1,0 +1,81 @@
+.settingsPage{
+    background-color: #1c1f24;
+    border-radius: 20px;
+    padding: 32px 43px;
+}
+
+.settingsPageUserInfo {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 90px;
+    gap: 20px;
+    margin-bottom: 54px;
+}
+
+.form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 90px;
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.userName, .userEmail {
+    margin: 0;
+}
+
+.userName {
+    font-size: 23px;
+    font-weight: 400;
+    color: white;
+}
+
+.userEmail {
+    font-size: 20px;
+    font-weight: 400;
+    color: #848484;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    max-width: 358px;
+
+    font-size: 16px;
+    font-weight: 400;
+    color: white;
+    margin-bottom: 16px;
+}
+
+.settingsInputField {
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #848484;
+    max-width: 358px;
+}
+
+.settingsSelect {
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #848484;
+    max-width: 358px;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+
+    border: 1px solid #848484;
+}
