@@ -1,10 +1,10 @@
 ﻿import {useUserContext} from "../../context/UserContext.tsx";
 import {initUserAPI} from "../../modules/client";
-import React, {type FormEvent, useState} from "react";
+import React, {type FormEvent, useMemo, useState} from "react";
 import styles from './SettingsPage.module.css';
 import {ActionButton} from "../../Components/ActionButton/ActionButton.tsx";
 import {API_MOCK} from "../../constants/session.ts";
-
+import moment from "moment-timezone";
 import userCardImage from '../../Components/UserCard/img/user-card.svg'
 import femaleImage from '../../Components/UserCard/img/femal-user-image.png'
 import otherCardImage from '../../Components/UserCard/img/other-user-image.png'
@@ -31,6 +31,8 @@ export const SettingsPage = () => {
     const [timeZone, setTimeZone] = useState(user?.timeZone || '');
     const [avatar, setAvatar] = useState<File|null>(null);
     const [previewAvatar, setPreviewAvatar] = useState<string | null>(user?.avatar || null);
+
+    const timeZones = useMemo(() => moment.tz.names(), []);
 
     const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -139,12 +141,16 @@ export const SettingsPage = () => {
                     </label>
                     <label>
                         Time Zone
-                        <input
-                            className={styles.settingsInputField}
-                            type="text"
-                            value={timeZone}
-                            placeholder={user?.timeZone || 'Time Zone'}
-                            onChange={(e) => setTimeZone(e.target.value)}/>
+                        <select className={styles.settingsSelect}
+                                value={timeZone}
+                                onChange={e => setTimeZone(e.target.value)}
+                                name="timeZone"
+                                required>
+                            <option value="" disabled>Select Time Zone</option>
+                            {timeZones.map(tz => (
+                                <option key={tz} value={tz}>{tz}</option>
+                            ))}
+                        </select>
                     </label>
 
                     <div className={styles.avatarContainer}>
