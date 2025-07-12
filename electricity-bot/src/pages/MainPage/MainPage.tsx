@@ -1,4 +1,4 @@
-﻿import {StatusCard} from "../../Components/StatusCard/StatusCard.tsx";
+import {StatusCard} from "../../Components/StatusCard/StatusCard.tsx";
 import {DeviceCard} from "../../Components/DeviceCard/DeviceCard.tsx";
 import styles from './MainPage.module.css';
 import {initDeviceModule} from "../../modules/device";
@@ -60,7 +60,6 @@ export const MainPage = () => {
             .then(res => {
                 if (!isMounted) return;
                 setCurrentStatus({ status: res.status, lastChange: res.lastChange });
-                setLoading(false);
             })
             .catch(err => {
                 if (!isMounted) return;

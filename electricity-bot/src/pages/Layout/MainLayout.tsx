@@ -34,7 +34,10 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
                         gender: ['male', 'female', 'other'].includes(data.gender) ? data.gender as 'male' | 'female' | 'other' : 'other',
                         email: data.email,
                     });
-                }).catch(() => navigate('/login'));
+                }).catch(() => {
+                    localStorage.removeItem(SESSION_KEY);
+                    navigate('/login');
+                });
         }
 
     }, [navigate, setUser, user]);

@@ -37,7 +37,7 @@
     overflow-y: auto;
 }
 
-.deviceContainer{
+.deviceContainer {
     display: grid;
     grid-template-columns: repeat(auto-fill, 325px);
     gap: 16px;
