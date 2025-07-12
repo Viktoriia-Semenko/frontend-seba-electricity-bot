@@ -41,6 +41,7 @@ export const LoginPage = () => {
                 gender: ['male', 'female', 'other'].includes(user.gender)
                     ? user.gender as 'male' | 'female' | 'other'
                     : 'other',
+                email: user.email,
             });
 
             navigate('/home');

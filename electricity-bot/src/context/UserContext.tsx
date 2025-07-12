@@ -6,6 +6,7 @@ interface User {
     surname: string;
     gender: 'male' | 'female' | 'other';
     token?: string;
+    email: string;
 }
 
 interface UserContextProps {

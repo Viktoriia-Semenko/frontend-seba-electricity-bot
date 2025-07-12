@@ -3,6 +3,7 @@ import { LoginPage } from './pages/LoginPage/LoginPage';
 import { RegisterPage } from './pages/RegisterPage/RegisterPage';
 import { MainLayout } from './pages/Layout/MainLayout';
 import {ProtectedRoute} from "./Components/ProtectedRoute/ProtectedRoute.tsx";
+import {MainPage} from "./pages/MainPage/MainPage.tsx";
 // import { EmptyStatePage } from './pages/EmptyStatePage/EmptyStatePage';
 // import {MainPage} from "./pages/MainPage/MainPage.tsx";
 
@@ -17,9 +18,7 @@ function App() {
                 <Route element={<ProtectedRoute />}>
                     <Route
                         path="/home"
-                        element={<MainLayout page="home">
-                            <p style={{ color: 'white' }}>Home content</p>
-                        </MainLayout>}
+                        element={<MainLayout page="home"><MainPage/> </MainLayout>}
                     />
                     <Route
                         path="/history"
