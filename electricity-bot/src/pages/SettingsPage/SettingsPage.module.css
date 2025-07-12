@@ -79,3 +79,51 @@ label {
 
     border: 1px solid #848484;
 }
+
+.avatarInput {
+    display: none;
+}
+
+.avatarLabel {
+    display: inline-block;
+    padding: 16px 20px;
+    border-radius: 8px;
+    background-color: #2f3236;
+    color: #848484;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 358px;
+}
+
+.avatarContainer {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    margin-top: 16px;
+    margin-bottom: 32px;
+}
+
+.avatarPreview {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+}
+
+.avatarPreviewImage {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatarRemoveButton {
+    background-color: #1C1F24;
+    border: none;
+    color: #848484;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}

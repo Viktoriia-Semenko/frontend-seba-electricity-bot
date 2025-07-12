@@ -155,7 +155,9 @@ export const SettingsPage = () => {
                             <input
                                 type="file"
                                 accept="image/*"
-                                onChange={onFileChange}/>
+                                onChange={onFileChange}
+                                className={styles.avatarInput}
+                            />
                         </label>
 
                         {previewAvatar && (
