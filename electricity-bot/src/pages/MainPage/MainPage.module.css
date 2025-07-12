@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .statusSection {
@@ -33,6 +33,7 @@
     max-width: 978px;
     padding: 12px 51px 53px;
 
+    display: flex;
     flex-direction: column;
     overflow-y: auto;
 }
