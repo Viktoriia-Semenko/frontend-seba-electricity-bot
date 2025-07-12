@@ -1,4 +1,4 @@
-﻿import {Navigate, Outlet} from "react-router-dom";
+import {Navigate, Outlet} from "react-router-dom";
 import {SESSION_KEY} from "../../constants/session.ts";
 
 export const ProtectedRoute = () => {
