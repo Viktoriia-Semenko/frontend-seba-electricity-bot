@@ -102,7 +102,7 @@ label {
     align-items: flex-start;
     gap: 32px;
     margin-top: 16px;
-    margin-bottom: 32px;
+    margin-bottom: 16px;
 }
 
 .avatarPreview {
@@ -164,9 +164,15 @@ label {
     background-color: #1C1F24;
     border-radius: 20px;
     padding: 32px;
-    width: 320px;
+    width: 425px;
     max-width: 90%;
     color: white;
+}
+
+.modalContent h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 24px;
 }
 
 .modalForm {
