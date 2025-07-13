@@ -1,6 +1,6 @@
 ﻿import {useUserContext} from "../../context/UserContext.tsx";
 import {initUserAPI} from "../../modules/client";
-import React, {type FormEvent, useMemo, useState} from "react";
+import React, {type FormEvent, useEffect, useMemo, useState} from "react";
 import styles from './SettingsPage.module.css';
 import {ActionButton} from "../../Components/ActionButton/ActionButton.tsx";
 import {API_MOCK} from "../../constants/session.ts";
@@ -8,22 +8,27 @@ import moment from "moment-timezone";
 import userCardImage from '../../Components/UserCard/img/user-card.svg'
 import femaleImage from '../../Components/UserCard/img/femal-user-image.png'
 import otherCardImage from '../../Components/UserCard/img/other-user-image.png'
+import {initDeviceModule} from "../../modules/device";
+import {SensorCard} from "../../Components/MySensorsCard/SensorCard.tsx";
+
+interface Device {
+    uuid: string;
+    name?: string;
+    status: 'ON' | 'OFF' | 'error';
+    lastChange: string;
+}
 
 function defaultImage(sex: 'male'|'female'|'other') {
-    if (sex === 'male') {
-        return userCardImage;
-    }
-
-    if (sex === 'female') {
-        return femaleImage;
-    }
-
+    if (sex === 'male') return userCardImage;
+    if (sex === 'female') return femaleImage;
     return otherCardImage;
 }
 
 export const SettingsPage = () => {
     const { user, setUser } = useUserContext();
-    const api = initUserAPI(fetch);
+    const api = useMemo(() =>  initUserAPI(fetch), []);
+    const deviceApi = useMemo(() => initDeviceModule(fetch), []);
+    const timeZones = useMemo(() => moment.tz.names(), []);
 
     const [firstName, setFirstName] = useState(user?.firstName || '');
     const [lastName, setLastName] = useState(user?.lastName || '');
@@ -32,7 +37,56 @@ export const SettingsPage = () => {
     const [avatar, setAvatar] = useState<File|null>(null);
     const [previewAvatar, setPreviewAvatar] = useState<string | null>(user?.avatar || null);
 
-    const timeZones = useMemo(() => moment.tz.names(), []);
+    const [devices, setDevices] = useState<Device[]>([]);
+    const [showModal, setShowModal] = useState(false);
+    const [newDevice, setNewDevice] = useState({uuid: '', name: '', type: 'apartment' as 'apartment'|'office'});
+    const [deviceToDelete, setDeviceToDelete] = useState<Device | null>(null);
+
+    useEffect(() => {
+        if(!user?.email) return;
+
+        deviceApi.getDevicesByUser(user.email)
+            .then(res => setDevices(res.devices))
+            .catch(console.error);
+    }, [user, deviceApi]);
+
+    const openModal = () => setShowModal(true);
+    const closeModal = () => setShowModal(false);
+    const onRegisterDevice = async (e: FormEvent) => {
+        e.preventDefault();
+
+        try {
+            await deviceApi.registerDevice(newDevice.uuid, newDevice.name);
+            const res = await deviceApi.getDevicesByUser(user!.email);
+            setDevices(res.devices);
+            closeModal();
+        } catch (error) {
+            console.error('Failed to register device:', error);
+            alert('Failed to register device');
+        }
+    }
+
+    const openDeleteModal = (device: Device) => setDeviceToDelete(device);
+    const closeDeleteModal = () => setDeviceToDelete(null);
+    const onDeleteDevice = async () => {
+        if (!deviceToDelete) return;
+
+        try {
+            await deviceApi.deleteDevice(deviceToDelete.uuid);
+            const res = await deviceApi.getDevicesByUser(user!.email);
+
+            const selectedDevice = localStorage.getItem('device-uuid');
+            if (selectedDevice === deviceToDelete.uuid) {
+                localStorage.removeItem('device-uuid');
+            }
+
+            setDevices(res.devices);
+            closeDeleteModal();
+        } catch (error) {
+            console.error('Failed to delete device:', error);
+            alert('Failed to delete device');
+        }
+    }
 
     const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -193,7 +247,82 @@ export const SettingsPage = () => {
 
                 </form>
             </div>
-            <div className="settings-page__devices-info"></div>
+            <div className={styles.settingsPageDeviceInfo}>
+                <h2 className={styles.devicesHeader}>My Devices</h2>
+                <div className={styles.sensorsList}>
+                    {devices.map((device) => {
+                        const tz = user?.timeZone || moment.tz.guess();
+                        const realTime = moment.tz(device.lastChange, tz).fromNow();
+
+                        return (
+                            <SensorCard key={device.uuid}
+                                        label={device.name ?? device.uuid}
+                                        timestamp={realTime}
+                                        type={device.name?.toLowerCase().includes('office') ? 'office' : 'apartment'}
+                                        onClick={() => openDeleteModal(device)} />
+                            )
+                    })}
+                    { devices.length === 0 && <p>No device yet :(</p>}
+                </div>
+                <ActionButton title="Register" onClick={openModal}/>
+
+                {showModal && (
+                    <div className={styles.modalOverlay} onClick={closeModal}>
+                        <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                            <h2 className={styles.modalTitle}>Register New Device</h2>
+                            <form onSubmit={onRegisterDevice} className={styles.modalForm}>
+                                <label>
+                                    Device UUID
+                                    <input
+                                        type="text"
+                                        value={newDevice.uuid}
+                                        onChange={(e) => setNewDevice(prev => ({ ...prev, uuid: e.target.value }))}
+                                        required
+                                        className={styles.settingsInputField}
+                                    />
+                                </label>
+                                <label>
+                                    Device Name
+                                    <input
+                                        type="text"
+                                        value={newDevice.name}
+                                        onChange={(e) => setNewDevice(prev => ({ ...prev, name: e.target.value }))}
+                                        className={styles.settingsInputField}
+                                    />
+                                </label>
+                                <label>
+                                    Device Type
+                                    <select
+                                        value={newDevice.type}
+                                        onChange={(e) => setNewDevice(prev => ({ ...prev, type: e.target.value as 'apartment' | 'office' }))}
+                                        className={styles.settingsSelect}
+                                    >
+                                        <option value="apartment">Apartment</option>
+                                        <option value="office">Office</option>
+                                    </select>
+                                </label>
+                                <div className={styles.modalButtons}>
+                                    <ActionButton type="submit" title="Register"/>
+                                    <button className={styles.closeModalButton} onClick={closeModal}>Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
+                {deviceToDelete && (
+                    <div className={styles.modalOverlay} onClick={closeDeleteModal}>
+                        <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                            <h2 className={styles.modalTitle}>Delete Device</h2>
+                            <p>Are you sure you want to delete the device <strong>{deviceToDelete.name || deviceToDelete.uuid}</strong>?</p>
+                            <div className={styles.modalButtons}>
+                                <ActionButton title="Delete" onClick={onDeleteDevice} />
+                                <button className={styles.closeModalButton} onClick={closeDeleteModal}>Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
             <div className="settings-page__danger-zone"></div>
         </div>
     );

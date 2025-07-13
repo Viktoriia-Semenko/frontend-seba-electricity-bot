@@ -127,3 +127,87 @@ label {
     cursor: pointer;
     transition: color 0.3s ease;
 }
+
+.settingsPageDeviceInfo {
+    margin-top: 60px;
+}
+
+.devicesHeader {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 25px;
+}
+
+.sensorsList {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: #1C1F24;
+    border-radius: 20px;
+    padding: 32px;
+    width: 320px;
+    max-width: 90%;
+    color: white;
+}
+
+.modalForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modalForm label {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+.modalForm input,
+.modalForm select {
+    padding: 12px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #848484;
+    border: 1px solid #848484;
+}
+
+.modalButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+}
+
+.closeModalButton {
+    padding: 12px 32px;
+    font-size: 16px;
+    max-width: 93px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #8C8C8C;
+    background-color: #1c1f24;
+    border: white 1px solid;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}

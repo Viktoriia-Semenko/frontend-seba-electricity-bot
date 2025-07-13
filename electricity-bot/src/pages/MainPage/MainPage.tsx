@@ -52,17 +52,31 @@ export const MainPage = () => {
     useEffect(() => {
         const uuid = localStorage.getItem('device-uuid');
         if (!uuid) {
+            setCurrentStatus(null);
+            setLoading(false);
+            return;
+        }
+
+        if(!devices.some(d => d.uuid === uuid)) {
+            localStorage.removeItem('device-uuid');
+            setCurrentStatus(null);
             setLoading(false);
             return;
         }
 
         let isMounted = true;
+        setLoading(true);
         api.getDeviceStatus(uuid)
             .then(res => {
                 if (!isMounted) return;
                 setCurrentStatus({ status: res.status, lastChange: res.lastChange });
             })
             .catch(err => {
+
+                if(err.message.includes('404')) {
+                    localStorage.removeItem('device-uuid');
+                    setCurrentStatus(null);
+                }
                 if (!isMounted) return;
                 setError(err.message);
             })
@@ -72,7 +86,7 @@ export const MainPage = () => {
         return () => {
             isMounted = false;
         }
-    }, [api]);
+    }, [api, devices]);
 
     if (loading) {
         return <div className={styles.loading}>Loading...</div>;
