@@ -254,68 +254,68 @@ export const SettingsPage = () => {
 
                 </form>
             </div>
-            <div className={styles.settingsPageDeviceInfo}>
-                <h2 className={styles.devicesHeader}>My Devices</h2>
-                <div className={styles.sensorsList}>
-                    {devices.map((device) => {
-                        const tz = user?.timeZone || moment.tz.guess();
-                        const realTime = moment.tz(device.lastChange, tz).fromNow();
+                <div className={styles.settingsPageDeviceInfo}>
+                    <h2 className={styles.devicesHeader}>My Devices</h2>
+                    <div className={styles.sensorsList}>
+                        {devices.map((device) => {
+                            const tz = user?.timeZone || moment.tz.guess();
+                            const realTime = moment.tz(device.lastChange, tz).fromNow();
 
-                        return (
-                            <SensorCard key={device.uuid}
-                                        label={device.name ?? device.uuid}
-                                        timestamp={realTime}
-                                        type={device.name?.toLowerCase().includes('office') ? 'office' : 'apartment'}
-                                        onClick={() => openDeleteModal(device)} />
+                            return (
+                                <SensorCard key={device.uuid}
+                                            label={device.name ?? device.uuid}
+                                            timestamp={realTime}
+                                            type={device.name?.toLowerCase().includes('office') ? 'office' : 'apartment'}
+                                            onClick={() => openDeleteModal(device)} />
                             )
-                    })}
-                    { devices.length === 0 && <p>No device yet :(</p>}
-                </div>
-                <ActionButton title="Register" onClick={openModal}/>
-
-                {showModal && (
-                    <div className={styles.modalOverlay} onClick={closeModal}>
-                        <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                            <h2 className={styles.modalTitle}>Register New Device</h2>
-                            <form onSubmit={onRegisterDevice} className={styles.modalForm}>
-                                <label>
-                                    Device UUID
-                                    <input
-                                        type="text"
-                                        value={newDevice.uuid}
-                                        onChange={(e) => setNewDevice(prev => ({ ...prev, uuid: e.target.value }))}
-                                        required
-                                        className={styles.settingsInputField}
-                                    />
-                                </label>
-                                <label>
-                                    Device Name
-                                    <input
-                                        type="text"
-                                        value={newDevice.name}
-                                        onChange={(e) => setNewDevice(prev => ({ ...prev, name: e.target.value }))}
-                                        className={styles.settingsInputField}
-                                    />
-                                </label>
-                                <label>
-                                    Device Type
-                                    <select
-                                        value={newDevice.type}
-                                        onChange={(e) => setNewDevice(prev => ({ ...prev, type: e.target.value as 'apartment' | 'office' }))}
-                                        className={styles.settingsSelect}
-                                    >
-                                        <option value="apartment">Apartment</option>
-                                        <option value="office">Office</option>
-                                    </select>
-                                </label>
-                                <div className={styles.modalButtons}>
-                                    <ActionButton type="submit" title="Register"/>
-                                    <button className={styles.closeModalButton} onClick={closeModal}>Close</button>
-                                </div>
-                            </form>
-                        </div>
+                        })}
+                        { devices.length === 0 && <p>No device yet :(</p>}
                     </div>
-                )}
+                    <ActionButton title="Register" onClick={openModal}/>
+
+                    {showModal && (
+                        <div className={styles.modalOverlay} onClick={closeModal}>
+                            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                                <h2 className={styles.modalTitle}>Register New Device</h2>
+                                <form onSubmit={onRegisterDevice} className={styles.modalForm}>
+                                    <label>
+                                        Device UUID
+                                        <input
+                                            type="text"
+                                            value={newDevice.uuid}
+                                            onChange={(e) => setNewDevice(prev => ({ ...prev, uuid: e.target.value }))}
+                                            required
+                                            className={styles.settingsInputField}
+                                        />
+                                    </label>
+                                    <label>
+                                        Device Name
+                                        <input
+                                            type="text"
+                                            value={newDevice.name}
+                                            onChange={(e) => setNewDevice(prev => ({ ...prev, name: e.target.value }))}
+                                            className={styles.settingsInputField}
+                                        />
+                                    </label>
+                                    <label>
+                                        Device Type
+                                        <select
+                                            value={newDevice.type}
+                                            onChange={(e) => setNewDevice(prev => ({ ...prev, type: e.target.value as 'apartment' | 'office' }))}
+                                            className={styles.settingsSelect}
+                                        >
+                                            <option value="apartment">Apartment</option>
+                                            <option value="office">Office</option>
+                                        </select>
+                                    </label>
+                                    <div className={styles.modalButtons}>
+                                        <ActionButton type="submit" title="Register"/>
+                                        <button className={styles.closeModalButton} onClick={closeModal}>Close</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
 
                 {deviceToDelete && (
                     <div className={styles.modalOverlay} onClick={closeDeleteModal}>
@@ -330,7 +330,6 @@ export const SettingsPage = () => {
                     </div>
                 )}
             </div>
-            <div className="settings-page__danger-zone"></div>
         </div>
     );
 }
