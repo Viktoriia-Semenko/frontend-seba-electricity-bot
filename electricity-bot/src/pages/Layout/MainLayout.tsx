@@ -55,6 +55,7 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
                         lastName={user.lastName}
                         sex={user.gender}
                         image={user.avatar}
+                        onClick={() => navigate('/settings')}
                     />
                 </div>
                 <nav className={styles.nav}>
