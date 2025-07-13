@@ -20,73 +20,43 @@ export const MainPage = () => {
     const api = useMemo(() => initDeviceModule(fetch), []);
 
     const [devices, setDevices] = useState<Device[]>([]);
+    const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
+    const [currentStatus, setCurrentStatus] = useState<{ status: Device['status']; lastChange: string } | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [currentStatus, setCurrentStatus] = useState<{ status: Device['status']; lastChange: string } | null>(null);
 
     useEffect(() => {
         if(!user?.email) return;
-        let isMounted = true;
-
         api.getDevicesByUser(user.email)
             .then(res => {
-                if(!isMounted) return;
                 setDevices(res.devices);
 
-                const firstDevice = res.devices?.[0]?.uuid;
-
-                if (firstDevice && !localStorage.getItem('device-uuid')) {
-                    localStorage.setItem('device-uuid', firstDevice);
+                if(!selectedDevice && res.devices.length) {
+                    setSelectedDevice(res.devices[0].uuid);
                 }
             })
             .catch(err => {
-                if(!isMounted) return;
-                setError(err.message);
-            });
-
-        return () => {
-            isMounted = false;
-        }
-    }, [user?.email, api]);
+                console.error('Error fetching devices:', err);
+                setError('Failed to fetch devices');
+            })
+            .finally(() => setLoading(false));
+    }, [user, api, selectedDevice]);
 
     useEffect(() => {
-        const uuid = localStorage.getItem('device-uuid');
-        if (!uuid) {
-            setCurrentStatus(null);
-            setLoading(false);
-            return;
-        }
-
-        if(!devices.some(d => d.uuid === uuid)) {
-            localStorage.removeItem('device-uuid');
-            setCurrentStatus(null);
-            setLoading(false);
-            return;
-        }
-
-        let isMounted = true;
+        if (!selectedDevice) return setCurrentStatus(null);
         setLoading(true);
-        api.getDeviceStatus(uuid)
+
+        api.getDeviceStatus(selectedDevice)
             .then(res => {
-                if (!isMounted) return;
-                setCurrentStatus({ status: res.status, lastChange: res.lastChange });
+                setCurrentStatus({status: res.status, lastChange: res.lastChange});
+                setError(null);
             })
             .catch(err => {
-
-                if(err.message.includes('404')) {
-                    localStorage.removeItem('device-uuid');
-                    setCurrentStatus(null);
-                }
-                if (!isMounted) return;
-                setError(err.message);
+                console.error('Error fetching device status:', err);
+                setError('Failed to fetch device status');
             })
-            .finally(() => {
-                if (isMounted) setLoading(false);
-            });
-        return () => {
-            isMounted = false;
-        }
-    }, [api, devices]);
+            .finally(() => setLoading(false));
+    }, [selectedDevice, api]);
 
     if (loading) {
         return <div className={styles.loading}>Loading...</div>;
@@ -100,16 +70,35 @@ export const MainPage = () => {
             {currentStatus && (
                 <div className={styles.statusSection}>
                     <StatusCard
+                        name={selectedDevice ? devices.find(d => d.uuid === selectedDevice)?.name || selectedDevice : 'No Device Selected'}
                         status={currentStatus.status}
                         timestamp={currentStatus.lastChange}
                         onClick={async () => {
-                            const uuid = localStorage.getItem('device-uuid')!;
-                            const sr = await api.getDeviceStatus(uuid);
-                            setCurrentStatus({ status: sr.status, lastChange: sr.lastChange });
+                            setLoading(true);
+                            try {
+                                const res = await api.getDeviceStatus(selectedDevice!);
+                                setCurrentStatus({status: res.status, lastChange: res.lastChange});
+                            } catch (err) {
+                                console.error('Error fetching device status:', err);
+                                setError('Failed to fetch device status');
+                            }
+                            finally {
+                                setLoading(false);
+                            }
                         }}
                     />
                 </div>
             )}
+
+            <div className={styles.deviceSelector}>
+                {devices.map((device) => (
+                    <button
+                        key={device.uuid}
+                        className={`${styles.dot} ${selectedDevice === device.uuid ? styles.activeDot : ''}`}
+                        onClick={() => setSelectedDevice(device.uuid)}
+                        title={device.name ?? device.uuid} />
+                ))}
+            </div>
 
             <div className={styles.devicesSection}>
                 <h2 className={styles.devicesSectionHeader}>My Devices</h2>

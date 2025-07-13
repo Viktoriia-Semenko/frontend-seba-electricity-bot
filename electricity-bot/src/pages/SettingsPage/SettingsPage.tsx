@@ -58,8 +58,15 @@ export const SettingsPage = () => {
         try {
             await deviceApi.registerDevice(newDevice.uuid, newDevice.name);
             const res = await deviceApi.getDevicesByUser(user!.email);
-            setDevices(res.devices);
-            closeModal();
+
+            if( !res.devices.some(d => d.uuid === newDevice.uuid)) {
+                alert('Device registration failed. Please check the UUID and try again.');
+                return;
+            }
+            else {
+                setDevices(res.devices);
+                closeModal();
+            }
         } catch (error) {
             console.error('Failed to register device:', error);
             alert('Failed to register device');
