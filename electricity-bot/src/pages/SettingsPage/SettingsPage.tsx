@@ -6,7 +6,7 @@ import {ActionButton} from "../../Components/ActionButton/ActionButton.tsx";
 import {API_MOCK} from "../../constants/session.ts";
 import moment from "moment-timezone";
 import userCardImage from '../../Components/UserCard/img/user-card.svg'
-import femaleImage from '../../Components/UserCard/img/femal-user-image.png'
+import femaleImage from '../../Components/UserCard/img/female-user-image.png'
 import otherCardImage from '../../Components/UserCard/img/other-user-image.png'
 import {initDeviceModule} from "../../modules/device";
 import {SensorCard} from "../../Components/MySensorsCard/SensorCard.tsx";
@@ -17,6 +17,8 @@ interface Device {
     status: 'ON' | 'OFF' | 'error';
     lastChange: string;
 }
+
+type DeviceType = 'apartment' | 'office';
 
 function defaultImage(sex: 'male'|'female'|'other') {
     if (sex === 'male') return userCardImage;
@@ -39,7 +41,7 @@ export const SettingsPage = () => {
 
     const [devices, setDevices] = useState<Device[]>([]);
     const [showModal, setShowModal] = useState(false);
-    const [newDevice, setNewDevice] = useState({uuid: '', name: '', type: 'apartment' as 'apartment'|'office'});
+    const [newDevice, setNewDevice] = useState({uuid: '', name: '', type: 'apartment' as DeviceType});
     const [deviceToDelete, setDeviceToDelete] = useState<Device | null>(null);
 
     useEffect(() => {
@@ -59,7 +61,7 @@ export const SettingsPage = () => {
             await deviceApi.registerDevice(newDevice.uuid, newDevice.name);
             const res = await deviceApi.getDevicesByUser(user!.email);
 
-            if( !res.devices.some(d => d.uuid === newDevice.uuid)) {
+            if(!res.devices.some(d => d.uuid === newDevice.uuid)) {
                 alert('Device registration failed. Please check the UUID and try again.');
                 return;
             }
@@ -231,7 +233,7 @@ export const SettingsPage = () => {
                             <div className={styles.avatarPreview}>
                                 <img
                                     className={styles.avatarPreviewImage}
-                                    src={previewAvatar ?? user.avatar}  alt="avatar preview"/>
+                                    src={previewAvatar ?? user.avatar} alt="avatar preview"/>
 
                                 <button type='button'
                                         className={styles.avatarRemoveButton}
@@ -269,7 +271,7 @@ export const SettingsPage = () => {
                                             onClick={() => openDeleteModal(device)} />
                             )
                         })}
-                        { devices.length === 0 && <p>No device yet :(</p>}
+                        {devices.length === 0 && <p>No device yet :(</p>}
                     </div>
                     <ActionButton title="Register" onClick={openModal}/>
 

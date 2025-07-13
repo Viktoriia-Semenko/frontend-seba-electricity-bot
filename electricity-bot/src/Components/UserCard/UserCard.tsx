@@ -1,6 +1,6 @@
 ﻿import './styles.css'
 import userCardImage from './img/user-card.svg'
-import femaleImage from './img/femal-user-image.png'
+import femaleImage from './img/female-user-image.png'
 import otherCardImage from './img/other-user-image.png'
 
 export interface UserCardProps {
