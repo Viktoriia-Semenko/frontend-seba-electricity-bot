@@ -13,7 +13,7 @@
     border-radius: 20px;
     color: white;
     max-width: 978px;
-    padding: 30px;
+    padding: 30px 58px;
 }
 
 .status-card__header {
@@ -51,6 +51,7 @@
     font-weight: 300;
     margin-left: 10px;
     margin-bottom: 10px;
+    color: #ffffff;
 }
 
 span {

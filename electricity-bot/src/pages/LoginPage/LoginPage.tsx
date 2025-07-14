@@ -6,6 +6,8 @@ import { initUserAPI } from '../../modules/client';
 import { AppPreview } from '../../Components/AppPreview/AppPreview';
 import {useRef, useState} from 'react';
 import { useUserContext } from '../../context/UserContext';
+import {Navigate} from "react-router-dom";
+import {SESSION_KEY} from "../../constants/session.ts";
 
 const api = initUserAPI(fetch);
 
@@ -13,9 +15,13 @@ export const LoginPage = () => {
     const navigate = useNavigate();
     const [isDisabled, setIsDisabled] = useState(false);
     const { setUser } = useUserContext();
-        
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+
+    const token = localStorage.getItem(SESSION_KEY);
+    if (token) {
+        return <Navigate to="/home" replace />;
+    }
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -36,6 +42,7 @@ export const LoginPage = () => {
                 gender: ['male', 'female', 'other'].includes(user.gender)
                     ? user.gender as 'male' | 'female' | 'other'
                     : 'other',
+                email: user.email,
             });
 
             navigate('/home');

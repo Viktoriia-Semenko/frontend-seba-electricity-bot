@@ -1,6 +1,7 @@
 import type {Static} from '@sinclair/typebox';
 import {Type} from '@sinclair/typebox';
 import {convertToType} from '../convertToType';
+import {SESSION_KEY} from "../../constants/session";
 
 const endpointPrefix = '/devices';
 
@@ -47,7 +48,7 @@ export type DeviceDelete = Static<typeof DeviceDeleteResponseSchema>;
 export type DeviceGetByUserResponse = Static<typeof DeviceGetByUserResponseSchema>;
 
 const requireAuthToken = (): string => {
-    const token = localStorage.getItem('bot-session');
+    const token = localStorage.getItem(SESSION_KEY);
     if (!token) {
         throw new Error('Authentication token is required');
     }
@@ -90,7 +91,10 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         const query = `?uuid=${encodeURIComponent(deviceId)}`;
         const url = `${endpointPrefix}${query}`;
 
-        const response = await fetchApi(url);
+        const response = await fetchApi(url, {
+            method: 'GET',
+            headers
+        });
 
         if (!response.ok) {
             throw new Error(`Failed to fetch device history: ${response.status} ${response.statusText}`);
@@ -111,7 +115,10 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         const query = `?uuid=${encodeURIComponent(deviceId)}`;
         const url = `${endpointPrefix}/status${query}`;
 
-        const response = await fetchApi(url);
+        const response = await fetchApi(url, {
+            method: 'GET',
+            headers
+        });
 
         if (!response.ok) {
             throw new Error(`Failed to fetch device status: ${response.status} ${response.statusText}`);

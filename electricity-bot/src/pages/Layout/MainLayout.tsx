@@ -6,6 +6,8 @@ import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useUserContext } from '../../context/UserContext';
+import {SESSION_KEY} from "../../constants/session.ts";
+import {initUserAPI} from "../../modules/client";
 
 interface MainLayoutProps {
     children: ReactNode;
@@ -17,41 +19,27 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
     const { user, setUser } = useUserContext();
 
     useEffect(() => {
-        const token = localStorage.getItem('bot-session');
+        const token = localStorage.getItem(SESSION_KEY);
         if (!token) {
             navigate('/login');
             return;
         }
 
-        const fetchUser = async () => {
-            try {
-                const res = await fetch('http://localhost:8080/user/me', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                if (!res.ok) {
-                    throw new Error('Unauthorized');
-                }
-
-                const data = await res.json();
-
-                setUser({
-                    name: data.firstName,
-                    surname: data.lastName,
-                    gender: data.gender || 'other',
-                });
-            } catch (err) {
-                console.error('Auth error:', err);
-                localStorage.removeItem('bot-session');
-                navigate('/login');
-            }
-        };
-
         if (!user) {
-            fetchUser();
+            initUserAPI(fetch).getCurrentUser()
+                .then(data => {
+                    setUser({
+                        name: data.firstName,
+                        surname: data.lastName,
+                        gender: ['male', 'female', 'other'].includes(data.gender) ? data.gender as 'male' | 'female' | 'other' : 'other',
+                        email: data.email,
+                    });
+                }).catch(() => {
+                    localStorage.removeItem(SESSION_KEY);
+                    navigate('/login');
+                });
         }
+
     }, [navigate, setUser, user]);
 
     if (!user) return null;
@@ -70,7 +58,7 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
                     <Button
                         title="Home"
                         type={page === 'home' ? 'active' : 'inactive'}
-                        onClick={() => navigate('/')}
+                        onClick={() => navigate('/home')}
                     />
                     <Button
                         title="History"

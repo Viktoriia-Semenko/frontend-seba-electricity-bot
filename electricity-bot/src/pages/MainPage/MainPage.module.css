@@ -1,0 +1,56 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    font-family: "Inter", sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: auto;
+}
+
+.statusSection {
+    flex: 0 0 auto;
+}
+
+.devicesSectionHeader {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 26px;
+}
+
+.devicesSection {
+    margin: 73px 0;
+    border-radius: 20px;
+    border: 1px solid white;
+    background-color: #1c1f24;
+    color: white;
+    max-width: 978px;
+    padding: 12px 51px 53px;
+
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.deviceContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 325px);
+    gap: 16px;
+    justify-content: start;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    gap: 16px;
+    color: white;
+}
