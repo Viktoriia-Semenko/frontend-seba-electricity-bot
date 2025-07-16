@@ -13,6 +13,7 @@
 
 .section {
     margin-bottom: 40px;
+    border-radius: 10px;
 }
 
 .sectionTitle {
