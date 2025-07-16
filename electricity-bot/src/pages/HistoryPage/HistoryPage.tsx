@@ -14,43 +14,56 @@ type Device = {
 type HistoryItem = {
     timestamp: string;
     status: 'ON' | 'OFF' | 'error';
+    sensorName: string;
 };
 
 export const HistoryPage = () => {
     const { user } = useUserContext();
     const api = useMemo(() => initDeviceModule(fetch), []);
-    const [devices, setDevices] = useState<Device[]>([]);
+    const [, setDevices] = useState<Device[]>([]);
     const [history, setHistory] = useState<HistoryItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const uuid = localStorage.getItem('device-uuid');
-        if (!user?.email || !uuid) {
-            setError('Missing user or device ID');
+        if (!user?.email) {
+            setError('Missing user');
             setLoading(false);
             return;
         }
 
-        Promise.all([
-            api.getDevicesByUser(user.email),
-            api.getDeviceHistory(uuid)
-        ])
-            .then(([deviceRes, historyRes]) => {
+        api.getDevicesByUser(user.email)
+            .then(async (deviceRes) => {
                 setDevices(deviceRes.devices);
-                setHistory(historyRes.history);
+
+                const historyResults = await Promise.all(
+                    deviceRes.devices.map(async (device) => {
+                        try {
+                            const res = await api.getDeviceHistory(device.uuid);
+                            return res.history.map(item => ({
+                                ...item,
+                                sensorName: device.name ?? device.uuid
+                            }));
+                        } catch {
+                            console.warn(`No history for device ${device.uuid}`);
+                            return [];
+                        }
+                    })
+                );
+
+                const allHistory = historyResults.flat();
+
+                setHistory(allHistory);
             })
             .catch((err) => {
                 console.error(err);
-                setError('Failed to load history data');
+                setError('Failed to load devices or history');
             })
             .finally(() => {
                 setLoading(false);
             });
     }, [user, api]);
 
-    const uuid = localStorage.getItem('device-uuid');
-    const deviceName = devices.find(d => d.uuid === uuid)?.name ?? 'Unknown device';
 
     const grouped = useMemo(() => {
         const result: Record<string, HistoryItem[]> = {};
@@ -101,7 +114,7 @@ export const HistoryPage = () => {
                         {items.map((item, idx) => (
                             <HistoryCard
                                 key={idx}
-                                sensorName={deviceName}
+                                sensorName={item.sensorName}
                                 status={item.status === 'ON' ? 'restored' : 'lost'}
                                 time={item.timestamp}
                                 isLast={idx === items.length - 1}
