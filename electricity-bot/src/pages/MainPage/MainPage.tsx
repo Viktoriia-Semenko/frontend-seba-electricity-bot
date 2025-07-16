@@ -5,7 +5,6 @@ import {initDeviceModule} from "../../modules/device";
 import {useUserContext} from "../../context/UserContext.tsx";
 import {useEffect, useState, useMemo} from "react";
 import {useNavigate} from "react-router-dom";
-import {ActionButton} from "../../Components/ActionButton/ActionButton.tsx";
 
 interface Device {
     uuid: string;
@@ -106,7 +105,6 @@ export const MainPage = () => {
                 {devices.length === 0 ? (
                     <div className={styles.emptyState}>
                         <p>It is time to add your first device! :)</p>
-                        <ActionButton onClick={() => navigate('/settings')} title="Add" />
                     </div>
                 ) : (
                     <div className={styles.deviceContainer}>

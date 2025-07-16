@@ -18,7 +18,7 @@ interface Device {
     lastChange: string;
 }
 
-type DeviceType = 'apartment' | 'office';
+// type DeviceType = 'apartment' | 'office';
 
 function defaultImage(sex: 'male'|'female'|'other') {
     if (sex === 'male') return userCardImage;
@@ -40,8 +40,6 @@ export const SettingsPage = () => {
     const [previewAvatar, setPreviewAvatar] = useState<string | null>(user?.avatar || null);
 
     const [devices, setDevices] = useState<Device[]>([]);
-    const [showModal, setShowModal] = useState(false);
-    const [newDevice, setNewDevice] = useState({uuid: '', name: '', type: 'apartment' as DeviceType});
     const [deviceToDelete, setDeviceToDelete] = useState<Device | null>(null);
 
     useEffect(() => {
@@ -51,29 +49,6 @@ export const SettingsPage = () => {
             .then(res => setDevices(res.devices))
             .catch(console.error);
     }, [user, deviceApi]);
-
-    const openModal = () => setShowModal(true);
-    const closeModal = () => setShowModal(false);
-    const onRegisterDevice = async (e: FormEvent) => {
-        e.preventDefault();
-
-        try {
-            await deviceApi.registerDevice(newDevice.uuid, newDevice.name);
-            const res = await deviceApi.getDevicesByUser(user!.email);
-
-            if(!res.devices.some(d => d.uuid === newDevice.uuid)) {
-                alert('Device registration failed. Please check the UUID and try again.');
-                return;
-            }
-            else {
-                setDevices(res.devices);
-                closeModal();
-            }
-        } catch (error) {
-            console.error('Failed to register device:', error);
-            alert('Failed to register device');
-        }
-    }
 
     const openDeleteModal = (device: Device) => setDeviceToDelete(device);
     const closeDeleteModal = () => setDeviceToDelete(null);
@@ -273,51 +248,6 @@ export const SettingsPage = () => {
                         })}
                         {devices.length === 0 && <p>No device yet :(</p>}
                     </div>
-                    <ActionButton title="Register" onClick={openModal}/>
-
-                    {showModal && (
-                        <div className={styles.modalOverlay} onClick={closeModal}>
-                            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                                <h2 className={styles.modalTitle}>Register New Device</h2>
-                                <form onSubmit={onRegisterDevice} className={styles.modalForm}>
-                                    <label>
-                                        Device UUID
-                                        <input
-                                            type="text"
-                                            value={newDevice.uuid}
-                                            onChange={(e) => setNewDevice(prev => ({ ...prev, uuid: e.target.value }))}
-                                            required
-                                            className={styles.settingsInputField}
-                                        />
-                                    </label>
-                                    <label>
-                                        Device Name
-                                        <input
-                                            type="text"
-                                            value={newDevice.name}
-                                            onChange={(e) => setNewDevice(prev => ({ ...prev, name: e.target.value }))}
-                                            className={styles.settingsInputField}
-                                        />
-                                    </label>
-                                    <label>
-                                        Device Type
-                                        <select
-                                            value={newDevice.type}
-                                            onChange={(e) => setNewDevice(prev => ({ ...prev, type: e.target.value as 'apartment' | 'office' }))}
-                                            className={styles.settingsSelect}
-                                        >
-                                            <option value="apartment">Apartment</option>
-                                            <option value="office">Office</option>
-                                        </select>
-                                    </label>
-                                    <div className={styles.modalButtons}>
-                                        <ActionButton type="submit" title="Register"/>
-                                        <button className={styles.closeModalButton} onClick={closeModal}>Close</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    )}
 
                 {deviceToDelete && (
                     <div className={styles.modalOverlay} onClick={closeDeleteModal}>
