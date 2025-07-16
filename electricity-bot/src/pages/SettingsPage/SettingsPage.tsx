@@ -3,13 +3,14 @@ import {initUserAPI} from "../../modules/client";
 import React, {type FormEvent, useEffect, useMemo, useState} from "react";
 import styles from './SettingsPage.module.css';
 import {ActionButton} from "../../Components/ActionButton/ActionButton.tsx";
-import {API_MOCK} from "../../constants/session.ts";
+import {API_MOCK, SESSION_KEY} from "../../constants/session.ts";
 import moment from "moment-timezone";
 import userCardImage from '../../Components/UserCard/img/user-card.svg'
 import femaleImage from '../../Components/UserCard/img/female-user-image.png'
 import otherCardImage from '../../Components/UserCard/img/other-user-image.png'
 import {initDeviceModule} from "../../modules/device";
 import {SensorCard} from "../../Components/MySensorsCard/SensorCard.tsx";
+import {useNavigate} from "react-router-dom";
 
 interface Device {
     uuid: string;
@@ -27,6 +28,7 @@ function defaultImage(sex: 'male'|'female'|'other') {
 }
 
 export const SettingsPage = () => {
+    const navigate = useNavigate();
     const { user, setUser } = useUserContext();
     const api = useMemo(() =>  initUserAPI(fetch), []);
     const deviceApi = useMemo(() => initDeviceModule(fetch), []);
@@ -231,6 +233,8 @@ export const SettingsPage = () => {
 
                 </form>
             </div>
+
+            <div className={styles.devicesAndLogout}>
                 <div className={styles.settingsPageDeviceInfo}>
                     <h2 className={styles.devicesHeader}>My Devices</h2>
                     <div className={styles.sensorsList}>
@@ -249,18 +253,27 @@ export const SettingsPage = () => {
                         {devices.length === 0 && <p>No device yet :(</p>}
                     </div>
 
-                {deviceToDelete && (
-                    <div className={styles.modalOverlay} onClick={closeDeleteModal}>
-                        <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                            <h2 className={styles.modalTitle}>Delete Device</h2>
-                            <p>Are you sure you want to delete the device <strong>{deviceToDelete.name || deviceToDelete.uuid}</strong>?</p>
-                            <div className={styles.modalButtons}>
-                                <ActionButton title="Delete" onClick={onDeleteDevice} />
-                                <button className={styles.closeModalButton} onClick={closeDeleteModal}>Cancel</button>
+                    {deviceToDelete && (
+                        <div className={styles.modalOverlay} onClick={closeDeleteModal}>
+                            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                                <h2 className={styles.modalTitle}>Delete Device</h2>
+                                <p>Are you sure you want to delete the device <strong>{deviceToDelete.name || deviceToDelete.uuid}</strong>?</p>
+                                <div className={styles.modalButtons}>
+                                    <ActionButton title="Delete" onClick={onDeleteDevice} />
+                                    <button className={styles.closeModalButton} onClick={closeDeleteModal}>Cancel</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
+
+                <div className={styles.settingsPageActions}>
+                    <ActionButton title="Logout" onClick={() => {
+                        localStorage.removeItem(SESSION_KEY);
+                        setUser(null);
+                        navigate('/login', { replace: true});
+                    }} />
+                </div>
             </div>
         </div>
     );

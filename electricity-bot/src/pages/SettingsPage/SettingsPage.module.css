@@ -175,27 +175,6 @@ label {
     margin-bottom: 24px;
 }
 
-.modalForm {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.modalForm label {
-    display: flex;
-    flex-direction: column;
-    font-size: 14px;
-}
-
-.modalForm input,
-.modalForm select {
-    padding: 12px;
-    border-radius: 8px;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: #848484;
-    border: 1px solid #848484;
-}
 
 .modalButtons {
     display: flex;
@@ -216,4 +195,15 @@ label {
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.devicesAndLogout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+}
+
+.settingsPageActions {
+    padding: 32px;
 }
