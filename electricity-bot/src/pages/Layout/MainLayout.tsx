@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useUserContext } from '../../context/UserContext';
-import {SESSION_KEY} from "../../constants/session.ts";
+import {API_MOCK, SESSION_KEY} from "../../constants/session.ts";
 import {initUserAPI} from "../../modules/client";
 
 interface MainLayoutProps {
@@ -29,10 +29,12 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
             initUserAPI(fetch).getCurrentUser()
                 .then(data => {
                     setUser({
-                        name: data.firstName,
-                        surname: data.lastName,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
                         gender: ['male', 'female', 'other'].includes(data.gender) ? data.gender as 'male' | 'female' | 'other' : 'other',
                         email: data.email,
+                        avatar: data.avatar ? `${API_MOCK}${data.avatar}` : undefined,
+                        timeZone: data.timeZone
                     });
                 }).catch(() => {
                     localStorage.removeItem(SESSION_KEY);
@@ -49,9 +51,11 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
             <aside className={styles.sidebar}>
                 <div className={styles.userCard}>
                     <UserCard
-                        name={user.name}
-                        surname={user.surname}
+                        firstName={user.firstName}
+                        lastName={user.lastName}
                         sex={user.gender}
+                        image={user.avatar}
+                        onClick={() => navigate('/settings')}
                     />
                 </div>
                 <nav className={styles.nav}>

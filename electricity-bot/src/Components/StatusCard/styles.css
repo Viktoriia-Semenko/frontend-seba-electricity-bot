@@ -12,7 +12,6 @@
     background-color: #1c1f24;
     border-radius: 20px;
     color: white;
-    max-width: 978px;
     padding: 30px 58px;
 }
 
@@ -44,6 +43,13 @@
 
 .status--error {
     color: #954250;
+}
+
+.name {
+    font-size: 24px;
+    font-weight: 500;
+    margin-left: 10px;
+    margin-bottom: 10px;
 }
 
 .last-change {

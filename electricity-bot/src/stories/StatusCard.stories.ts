@@ -25,6 +25,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Offline: Story = {
     args: {
+        name: 'Living Room Light',
         status: 'OFF',
         timestamp: new Date(Date.now() - 3600000).toISOString(),
         onClick: fn(() => alert('Status clicked!'))
@@ -33,6 +34,7 @@ export const Offline: Story = {
 
 export const Online: Story = {
     args: {
+        name: 'Kitchen Light',
         status: 'ON',
         timestamp: new Date().toISOString(),
         onClick: fn(() => alert('Status clicked!'))
@@ -41,6 +43,7 @@ export const Online: Story = {
 
 export const Error: Story = {
     args: {
+        name: 'Bedroom Light',
         status: 'error',
         timestamp: new Date(Date.now() - 7200000).toISOString(),
         onClick: fn(() => alert('Status clicked!'))

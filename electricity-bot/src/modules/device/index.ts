@@ -1,9 +1,9 @@
 import type {Static} from '@sinclair/typebox';
 import {Type} from '@sinclair/typebox';
 import {convertToType} from '../convertToType';
-import {SESSION_KEY} from "../../constants/session";
+import {API_MOCK, SESSION_KEY} from "../../constants/session";
 
-const endpointPrefix = '/devices';
+const endpointPrefix = `${API_MOCK}/devices`;
 
 const DeviceRegisterResponseOkSchema = Type.Object({
     message: Type.String(),

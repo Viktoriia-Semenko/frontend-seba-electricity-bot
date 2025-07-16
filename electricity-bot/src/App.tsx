@@ -4,8 +4,7 @@ import { RegisterPage } from './pages/RegisterPage/RegisterPage';
 import { MainLayout } from './pages/Layout/MainLayout';
 import {ProtectedRoute} from "./Components/ProtectedRoute/ProtectedRoute.tsx";
 import {MainPage} from "./pages/MainPage/MainPage.tsx";
-// import { EmptyStatePage } from './pages/EmptyStatePage/EmptyStatePage';
-// import {MainPage} from "./pages/MainPage/MainPage.tsx";
+import {SettingsPage} from "./pages/SettingsPage/SettingsPage.tsx";
 
 function App() {
     return (
@@ -18,7 +17,7 @@ function App() {
                 <Route element={<ProtectedRoute />}>
                     <Route
                         path="/home"
-                        element={<MainLayout page="home"><MainPage/> </MainLayout>}
+                        element={<MainLayout page="home"><MainPage/></MainLayout>}
                     />
                     <Route
                         path="/history"
@@ -30,10 +29,7 @@ function App() {
                     />
                     <Route
                         path="/settings"
-                        element={
-                            <MainLayout page="settings">
-                                <p style={{ color: 'white' }}>Settings content</p>
-                            </MainLayout>
+                        element={<MainLayout page="settings"><SettingsPage /></MainLayout>
                         }
                     />
                 </Route>

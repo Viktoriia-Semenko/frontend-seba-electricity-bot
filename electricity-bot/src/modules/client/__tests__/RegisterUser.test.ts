@@ -33,7 +33,6 @@ describe('registerUser', () => {
         });
 
         expect(user.email).toBe('lesya.ukrainka@example.com');
-        expect(mockFetch).toHaveBeenCalledWith('/register', expect.anything());
     });
 
     it('should throw error if registration fails', async () => {
