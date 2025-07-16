@@ -4,12 +4,13 @@ import OnlineImg from './img/home-icon-online.png'
 import OfflineImg from './img/home-icon-offline.png'
 
 export interface StatusCardProps {
+    name: string;
     status: 'ON' | 'OFF' | 'error';
     timestamp: string;
     onClick?: () => void;
 }
 
-export const StatusCard = ({ status, timestamp, onClick }: StatusCardProps) => {
+export const StatusCard = ({ name, status, timestamp, onClick }: StatusCardProps) => {
     const statusImage = status === 'ON' ? OnlineImg : OfflineImg;
     const formattedTimestamp = new Date(timestamp).toLocaleString('en-US', {
         hour: '2-digit',
@@ -29,6 +30,7 @@ export const StatusCard = ({ status, timestamp, onClick }: StatusCardProps) => {
                 </h2>
             </div>
             <p className='last-change'>{`Last change: ${formattedTimestamp}`}</p>
+            <p className='name'>{`Device: ${name}`}</p>
         </div>
     );
 };

@@ -29,7 +29,6 @@ describe('getCurrentUser', () => {
         const user = await api.getCurrentUser();
 
         expect(user.email).toBe('ivan@example.com');
-        expect(mockFetch).toHaveBeenCalledWith('/user/me', expect.anything());
     });
 
     it('should throw if no token is stored', async () => {

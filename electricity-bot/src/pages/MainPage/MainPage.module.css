@@ -14,8 +14,35 @@
     overflow: auto;
 }
 
+.loading, .error {
+    text-align: center;
+    padding: 2rem;
+}
+
 .statusSection {
     flex: 0 0 auto;
+}
+
+.deviceSelector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.dot {
+    padding: 0;
+    margin: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #1C1F24;
+    border: none;
+    cursor: pointer;
+}
+.activeDot {
+    background-color: white;
 }
 
 .devicesSectionHeader {
@@ -30,7 +57,6 @@
     border: 1px solid white;
     background-color: #1c1f24;
     color: white;
-    max-width: 978px;
     padding: 12px 51px 53px;
 
     display: flex;

@@ -37,8 +37,8 @@ export const LoginPage = () => {
             api.saveToken(user.token);
 
             setUser({
-                name: user.firstName,
-                surname: user.lastName,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 gender: ['male', 'female', 'other'].includes(user.gender)
                     ? user.gender as 'male' | 'female' | 'other'
                     : 'other',

@@ -14,8 +14,8 @@ const meta = {
         layout: 'fullscreen',
     },
     args: {
-        name: 'Taras',
-        surname: 'Shevchenko',
+        firstName: 'Taras',
+        lastName: 'Shevchenko',
         sex: 'male',
         onClick: fn(() => alert('User card clicked!'))
     },
@@ -26,32 +26,32 @@ type Story = StoryObj<typeof meta>;
 
 export const MaleSex: Story = {
     args: {
-        name: 'Taras',
-        surname: 'Shevchenko',
+        firstName: 'Taras',
+        lastName: 'Shevchenko',
         sex: 'male'
     },
 };
 
 export const FemaleSex: Story = {
     args: {
-        name: 'Lesya',
-        surname: 'Ukrainka',
+        firstName: 'Lesya',
+        lastName: 'Ukrainka',
         sex: 'female'
     },
 };
 
 export const OtherSex: Story = {
     args: {
-        name: 'Ivan',
-        surname: 'Franko',
+        firstName: 'Ivan',
+        lastName: 'Franko',
         sex: 'other'
     },
 };
 
 export const WithImage: Story = {
     args: {
-        name: 'Taras',
-        surname: 'Shevchenko',
+        firstName: 'Taras',
+        lastName: 'Shevchenko',
         image: 'https://knu.ua/img/kobzar.jpg',
     },
 };
