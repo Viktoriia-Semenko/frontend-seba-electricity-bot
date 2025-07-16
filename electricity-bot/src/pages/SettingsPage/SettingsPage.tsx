@@ -19,8 +19,6 @@ interface Device {
     lastChange: string;
 }
 
-// type DeviceType = 'apartment' | 'office';
-
 function defaultImage(sex: 'male'|'female'|'other') {
     if (sex === 'male') return userCardImage;
     if (sex === 'female') return femaleImage;
