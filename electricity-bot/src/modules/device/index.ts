@@ -5,14 +5,6 @@ import {API_MOCK, SESSION_KEY} from "../../constants/session";
 
 const endpointPrefix = `${API_MOCK}/devices`;
 
-const DeviceRegisterResponseOkSchema = Type.Object({
-    message: Type.String(),
-});
-
-const DeviceRegisterResponseErrorSchema = Type.Object({
-    error: Type.String(),
-});
-
 const DeviceHistorySchema = Type.Object({
     history: Type.Array(
         Type.Object({
@@ -40,8 +32,6 @@ const DeviceGetByUserResponseSchema = Type.Object({
     )
 });
 
-export type DeviceRegisterResponseOk = Static<typeof DeviceRegisterResponseOkSchema>;
-export type DeviceRegisterResponseError = Static<typeof DeviceRegisterResponseErrorSchema>;
 export type DeviceHistory = Static<typeof DeviceHistorySchema>;
 export type DeviceStatus = Static<typeof DeviceStatusSchema>;
 export type DeviceDelete = Static<typeof DeviceDeleteResponseSchema>;
@@ -56,30 +46,6 @@ const requireAuthToken = (): string => {
 }
 
 export const initDeviceModule = (fetchApi: typeof fetch) => {
-    const registerDevice = async (uuid: string, name:string): Promise<DeviceRegisterResponseOk | DeviceRegisterResponseError> => {
-        const token = requireAuthToken();
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('cache-control', 'no-cache');
-        headers.append('Authorization', `Bearer ${token}`);
-
-        const endpoint = `${endpointPrefix}/register`;
-
-        const body = JSON.stringify({ uuid, name });
-
-        const response = await fetchApi(endpoint, {
-            method: 'POST',
-            headers,
-            body
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to register device: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return convertToType(data, Type.Union([DeviceRegisterResponseOkSchema, DeviceRegisterResponseErrorSchema]));
-    };
 
     const getDeviceHistory = async (deviceId: string): Promise<DeviceHistory> => {
         const token = requireAuthToken();
@@ -178,7 +144,6 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
     }
 
     return {
-        registerDevice,
         getDeviceHistory,
         getDeviceStatus,
         deleteDevice,

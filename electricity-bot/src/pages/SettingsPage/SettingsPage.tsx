@@ -3,13 +3,14 @@ import {initUserAPI} from "../../modules/client";
 import React, {type FormEvent, useEffect, useMemo, useState} from "react";
 import styles from './SettingsPage.module.css';
 import {ActionButton} from "../../Components/ActionButton/ActionButton.tsx";
-import {API_MOCK} from "../../constants/session.ts";
+import {API_MOCK, SESSION_KEY} from "../../constants/session.ts";
 import moment from "moment-timezone";
 import userCardImage from '../../Components/UserCard/img/user-card.svg'
 import femaleImage from '../../Components/UserCard/img/female-user-image.png'
 import otherCardImage from '../../Components/UserCard/img/other-user-image.png'
 import {initDeviceModule} from "../../modules/device";
 import {SensorCard} from "../../Components/MySensorsCard/SensorCard.tsx";
+import {useNavigate} from "react-router-dom";
 
 interface Device {
     uuid: string;
@@ -18,8 +19,6 @@ interface Device {
     lastChange: string;
 }
 
-type DeviceType = 'apartment' | 'office';
-
 function defaultImage(sex: 'male'|'female'|'other') {
     if (sex === 'male') return userCardImage;
     if (sex === 'female') return femaleImage;
@@ -27,6 +26,7 @@ function defaultImage(sex: 'male'|'female'|'other') {
 }
 
 export const SettingsPage = () => {
+    const navigate = useNavigate();
     const { user, setUser } = useUserContext();
     const api = useMemo(() =>  initUserAPI(fetch), []);
     const deviceApi = useMemo(() => initDeviceModule(fetch), []);
@@ -40,8 +40,6 @@ export const SettingsPage = () => {
     const [previewAvatar, setPreviewAvatar] = useState<string | null>(user?.avatar || null);
 
     const [devices, setDevices] = useState<Device[]>([]);
-    const [showModal, setShowModal] = useState(false);
-    const [newDevice, setNewDevice] = useState({uuid: '', name: '', type: 'apartment' as DeviceType});
     const [deviceToDelete, setDeviceToDelete] = useState<Device | null>(null);
 
     useEffect(() => {
@@ -51,29 +49,6 @@ export const SettingsPage = () => {
             .then(res => setDevices(res.devices))
             .catch(console.error);
     }, [user, deviceApi]);
-
-    const openModal = () => setShowModal(true);
-    const closeModal = () => setShowModal(false);
-    const onRegisterDevice = async (e: FormEvent) => {
-        e.preventDefault();
-
-        try {
-            await deviceApi.registerDevice(newDevice.uuid, newDevice.name);
-            const res = await deviceApi.getDevicesByUser(user!.email);
-
-            if(!res.devices.some(d => d.uuid === newDevice.uuid)) {
-                alert('Device registration failed. Please check the UUID and try again.');
-                return;
-            }
-            else {
-                setDevices(res.devices);
-                closeModal();
-            }
-        } catch (error) {
-            console.error('Failed to register device:', error);
-            alert('Failed to register device');
-        }
-    }
 
     const openDeleteModal = (device: Device) => setDeviceToDelete(device);
     const closeDeleteModal = () => setDeviceToDelete(null);
@@ -256,6 +231,8 @@ export const SettingsPage = () => {
 
                 </form>
             </div>
+
+            <div className={styles.devicesAndLogout}>
                 <div className={styles.settingsPageDeviceInfo}>
                     <h2 className={styles.devicesHeader}>My Devices</h2>
                     <div className={styles.sensorsList}>
@@ -273,64 +250,28 @@ export const SettingsPage = () => {
                         })}
                         {devices.length === 0 && <p>No device yet :(</p>}
                     </div>
-                    <ActionButton title="Register" onClick={openModal}/>
 
-                    {showModal && (
-                        <div className={styles.modalOverlay} onClick={closeModal}>
+                    {deviceToDelete && (
+                        <div className={styles.modalOverlay} onClick={closeDeleteModal}>
                             <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                                <h2 className={styles.modalTitle}>Register New Device</h2>
-                                <form onSubmit={onRegisterDevice} className={styles.modalForm}>
-                                    <label>
-                                        Device UUID
-                                        <input
-                                            type="text"
-                                            value={newDevice.uuid}
-                                            onChange={(e) => setNewDevice(prev => ({ ...prev, uuid: e.target.value }))}
-                                            required
-                                            className={styles.settingsInputField}
-                                        />
-                                    </label>
-                                    <label>
-                                        Device Name
-                                        <input
-                                            type="text"
-                                            value={newDevice.name}
-                                            onChange={(e) => setNewDevice(prev => ({ ...prev, name: e.target.value }))}
-                                            className={styles.settingsInputField}
-                                        />
-                                    </label>
-                                    <label>
-                                        Device Type
-                                        <select
-                                            value={newDevice.type}
-                                            onChange={(e) => setNewDevice(prev => ({ ...prev, type: e.target.value as 'apartment' | 'office' }))}
-                                            className={styles.settingsSelect}
-                                        >
-                                            <option value="apartment">Apartment</option>
-                                            <option value="office">Office</option>
-                                        </select>
-                                    </label>
-                                    <div className={styles.modalButtons}>
-                                        <ActionButton type="submit" title="Register"/>
-                                        <button className={styles.closeModalButton} onClick={closeModal}>Close</button>
-                                    </div>
-                                </form>
+                                <h2 className={styles.modalTitle}>Delete Device</h2>
+                                <p>Are you sure you want to delete the device <strong>{deviceToDelete.name || deviceToDelete.uuid}</strong>?</p>
+                                <div className={styles.modalButtons}>
+                                    <ActionButton title="Delete" onClick={onDeleteDevice} />
+                                    <button className={styles.closeModalButton} onClick={closeDeleteModal}>Cancel</button>
+                                </div>
                             </div>
                         </div>
                     )}
+                </div>
 
-                {deviceToDelete && (
-                    <div className={styles.modalOverlay} onClick={closeDeleteModal}>
-                        <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                            <h2 className={styles.modalTitle}>Delete Device</h2>
-                            <p>Are you sure you want to delete the device <strong>{deviceToDelete.name || deviceToDelete.uuid}</strong>?</p>
-                            <div className={styles.modalButtons}>
-                                <ActionButton title="Delete" onClick={onDeleteDevice} />
-                                <button className={styles.closeModalButton} onClick={closeDeleteModal}>Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                <div className={styles.settingsPageActions}>
+                    <ActionButton title="Logout" onClick={() => {
+                        localStorage.removeItem(SESSION_KEY);
+                        setUser(null);
+                        navigate('/login', { replace: true});
+                    }} />
+                </div>
             </div>
         </div>
     );

@@ -7,7 +7,7 @@ import { AppPreview } from '../../Components/AppPreview/AppPreview';
 import {useRef, useState} from 'react';
 import { useUserContext } from '../../context/UserContext';
 import {Navigate} from "react-router-dom";
-import {SESSION_KEY} from "../../constants/session.ts";
+import {API_MOCK, SESSION_KEY} from "../../constants/session.ts";
 
 const api = initUserAPI(fetch);
 
@@ -36,13 +36,14 @@ export const LoginPage = () => {
             const user = await api.loginUser(payload);
             api.saveToken(user.token);
 
+            const profile = await api.getCurrentUser();
             setUser({
-                firstName: user.firstName,
-                lastName: user.lastName,
-                gender: ['male', 'female', 'other'].includes(user.gender)
-                    ? user.gender as 'male' | 'female' | 'other'
-                    : 'other',
-                email: user.email,
+                id: profile.id,
+                firstName: profile.firstName,
+                lastName: profile.lastName,
+                email: profile.email,
+                gender: profile.gender as 'male'|'female'|'other',
+                avatar: profile.avatar ? `${API_MOCK}${profile.avatar}` : undefined,
             });
 
             navigate('/home');
