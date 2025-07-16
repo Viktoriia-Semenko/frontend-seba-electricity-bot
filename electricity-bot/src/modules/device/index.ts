@@ -5,14 +5,6 @@ import {API_MOCK, SESSION_KEY} from "../../constants/session";
 
 const endpointPrefix = `${API_MOCK}/devices`;
 
-// const DeviceRegisterResponseOkSchema = Type.Object({
-//     message: Type.String(),
-// });
-//
-// const DeviceRegisterResponseErrorSchema = Type.Object({
-//     error: Type.String(),
-// });
-
 const DeviceHistorySchema = Type.Object({
     history: Type.Array(
         Type.Object({
@@ -40,8 +32,6 @@ const DeviceGetByUserResponseSchema = Type.Object({
     )
 });
 
-// export type DeviceRegisterResponseOk = Static<typeof DeviceRegisterResponseOkSchema>;
-// export type DeviceRegisterResponseError = Static<typeof DeviceRegisterResponseErrorSchema>;
 export type DeviceHistory = Static<typeof DeviceHistorySchema>;
 export type DeviceStatus = Static<typeof DeviceStatusSchema>;
 export type DeviceDelete = Static<typeof DeviceDeleteResponseSchema>;
