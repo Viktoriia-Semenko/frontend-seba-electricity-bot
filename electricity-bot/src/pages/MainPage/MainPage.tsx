@@ -115,7 +115,7 @@ export const MainPage = () => {
                                 status={d.status === 'ON' ? 'online' : 'offline'}
                                 onClick={() => {
                                     localStorage.setItem('device-uuid', d.uuid);
-                                    navigate(`/history?uuid=${d.uuid}`);
+                                    navigate(`/history`);
                                 }}
                             />
                         ))}

@@ -5,6 +5,7 @@ import { MainLayout } from './pages/Layout/MainLayout';
 import {ProtectedRoute} from "./Components/ProtectedRoute/ProtectedRoute.tsx";
 import {MainPage} from "./pages/MainPage/MainPage.tsx";
 import {SettingsPage} from "./pages/SettingsPage/SettingsPage.tsx";
+import {HistoryPage} from "./pages/HistoryPage/HistoryPage.tsx";
 
 function App() {
     return (
@@ -23,7 +24,7 @@ function App() {
                         path="/history"
                         element={
                             <MainLayout page="history">
-                                <p style={{ color: 'white' }}>History content</p>
+                                <HistoryPage />
                             </MainLayout>
                         }
                     />
