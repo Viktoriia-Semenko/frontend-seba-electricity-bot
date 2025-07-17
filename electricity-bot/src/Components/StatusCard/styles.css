@@ -64,3 +64,28 @@ span {
     font-size: 64px;
     font-weight: 800;
 }
+
+@media (max-width: 768px) {
+
+    .status-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .status-card__title {
+        font-size: 32px;
+        margin-left: 16px;
+    }
+
+    .last-change {
+        font-size: 18px;
+    }
+
+    .name {
+        font-size: 18px;
+    }
+
+    span {
+        font-size: 32px;
+    }
+}
