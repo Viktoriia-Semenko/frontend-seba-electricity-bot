@@ -57,7 +57,7 @@ export const LoginPage = () => {
 
     return (
         <div className={styles.wrapper}>
-            <AppPreview />
+            <AppPreview className={styles.phoneZone} />
             <div className={styles.loginZone}>
                 <div className={styles.header}>
                     <Header title="Login" pageType="login" />

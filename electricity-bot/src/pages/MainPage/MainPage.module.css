@@ -80,3 +80,45 @@
     gap: 16px;
     color: white;
 }
+
+@media (max-width: 1024px) {
+    .devicesSection {
+        padding: 12px 24px 40px;
+        margin: 48px 0;
+    }
+
+    .devicesSectionHeader {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .deviceContainer {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        justify-content: center;
+    }
+
+    .deviceSelector {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .devicesSection {
+        padding: 12px 16px 32px;
+    }
+
+    .deviceContainer {
+        grid-template-columns: 1fr;
+    }
+
+    .devicesSectionHeader {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .emptyState {
+        text-align: center;
+        padding: 20px;
+    }
+}

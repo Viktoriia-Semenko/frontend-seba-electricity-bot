@@ -207,3 +207,71 @@ label {
 .settingsPageActions {
     padding: 32px;
 }
+
+@media (max-width: 768px) {
+    .form {
+        grid-template-columns: 1fr;
+    }
+
+    .avatarContainer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .settingsInputField,
+    .settingsSelect,
+    .avatarLabel {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .devicesAndLogout {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+    }
+
+    .settingsPage {
+        padding: 24px;
+    }
+
+    .settingsPageUserInfo {
+        flex-direction: column;
+        height: auto;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .avatarPreview {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .modalContent {
+        width: 90%;
+        padding: 24px;
+    }
+
+    .modalButtons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .closeModalButton {
+        width: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+    .userName {
+        font-size: 18px;
+    }
+
+    .userEmail {
+        font-size: 16px;
+    }
+
+    .devicesHeader {
+        font-size: 18px;
+    }
+}

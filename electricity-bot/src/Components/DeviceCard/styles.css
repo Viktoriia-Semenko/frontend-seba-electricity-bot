@@ -39,3 +39,19 @@
 .offline {
   color: #954250;
 }
+
+@media (max-width: 768px) {
+  .device-card {
+    max-width: 100%;
+    padding: 16px;
+  }
+
+  .device-name {
+    font-size: 20px;
+    margin-left: 16px;
+  }
+
+  .device-status {
+    margin-left: 16px;
+  }
+}
