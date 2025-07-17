@@ -183,7 +183,13 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to fetch avatar');
+            if (response.status === 401 || response.status === 403) {
+                throw new Error('Failed to fetch avatar: Authentication error (invalid or missing token)');
+            } else if (response.status >= 500 && response.status < 600) {
+                throw new Error('Failed to fetch avatar: Server error');
+            } else {
+                throw new Error(`Failed to fetch avatar: HTTP status ${response.status}`);
+            }
         }
 
         const blob = await response.blob();
