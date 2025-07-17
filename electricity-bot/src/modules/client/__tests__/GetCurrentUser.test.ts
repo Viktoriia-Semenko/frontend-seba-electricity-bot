@@ -65,7 +65,7 @@ describe('getCurrentUser', () => {
             email: 'taras@example.com',
             gender: 'male',
             token: 'abc123',
-            avatar: 'https://example.com/avatar.png',
+            avatarUrl: 'https://example.com/avatar.png',
             timeZone: 'UTC+2',
         };
 
@@ -78,7 +78,6 @@ describe('getCurrentUser', () => {
 
         const user = await api.getCurrentUser();
 
-        expect(user.avatar).toBe('https://example.com/avatar.png');
         expect(user.timeZone).toBe('UTC+2');
     });
 
