@@ -1,5 +1,5 @@
 .container {
-    padding: 15px 10px;
+    padding: 32px 24px;
     background-color: #1C1F24;
     border-radius: 20px;
     color: white;
@@ -34,4 +34,26 @@
     text-align: center;
     font-size: 18px;
     color: #999;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        padding: 20px;
+        max-width: 100%;
+    }
+
+    .title {
+        font-size: 24px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 16px;
+    }
+
+    .sectionTitle {
+        font-size: 18px;
+    }
 }

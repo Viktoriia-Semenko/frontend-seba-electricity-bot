@@ -6,7 +6,8 @@
 }
 
 .history-card {
-    width: 992px;
+    width: 100%;
+    max-width: unset;
     height: 90px;
     background-color: #272C30;
     display: flex;
