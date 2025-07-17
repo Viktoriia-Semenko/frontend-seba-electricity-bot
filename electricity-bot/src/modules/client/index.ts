@@ -54,12 +54,16 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         password: string;
         gender: string;
     }): Promise<User> => {
+        const bodyPayload = {
+            ...payload,
+            role: 'user' as const, // Assuming role is always 'user'
+        }
         const response = await fetchAPI(`/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(bodyPayload)
         });
 
         if (!response.ok) {
