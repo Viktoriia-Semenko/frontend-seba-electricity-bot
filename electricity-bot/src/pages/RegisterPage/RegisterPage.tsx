@@ -43,7 +43,7 @@ export const RegisterPage = () => {
 
     return (
         <div className={styles.wrapper}>
-            <AppPreview />
+            <AppPreview className={styles.phoneZone}/>
             <div className={styles.registerZone}>
                 <div className={styles.header}>
                     <RegistrationForm
