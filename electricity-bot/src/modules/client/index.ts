@@ -1,9 +1,9 @@
 import { Type } from '@sinclair/typebox';
 import type { Static } from '@sinclair/typebox';
 import { convertToType } from '../convertToType';
-import {API_MOCK, SESSION_KEY} from '../../constants/session';
+import {SESSION_KEY} from '../../constants/session';
 
-const link = `${API_MOCK}`
+//const link = `${API_MOCK}`
 
 const UserSchema = Type.Object({
     id: Type.String(),
@@ -31,7 +31,7 @@ export type User = Static<typeof UserSchema>
 export const initUserAPI = (fetchAPI: typeof fetch) => {
 
     const loginUser = async (credentials: LoginRequest): Promise<User> => {
-        const response = await fetchAPI(`${link}/login`, {
+        const response = await fetchAPI(`/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         password: string;
         gender: string;
     }): Promise<User> => {
-        const response = await fetchAPI(`${link}/register`, {
+        const response = await fetchAPI(`/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -74,7 +74,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         const token = getToken();
         if (!token) throw new Error('No token found');
 
-        const response = await fetchAPI(`${link}/user/me`, {
+        const response = await fetchAPI(`/user/me`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -102,7 +102,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
     }): Promise<User> => {
         const token = getToken();
 
-        const response = await fetchAPI(`${link}/user/me`, {
+        const response = await fetchAPI(`/user/me`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         const token = getToken();
         const formData = new FormData();
         formData.append('avatar', file);
-        const response = await fetchAPI(`${link}/user/avatar`, {
+        const response = await fetchAPI(`/user/avatar`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -151,7 +151,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
 
     const deleteAvatar = async (): Promise<User> => {
         const token = getToken();
-        const response = await fetchAPI(`${link}/user/avatar`, {
+        const response = await fetchAPI(`/user/avatar`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -175,7 +175,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         const token = getToken();
         if (!token) throw new Error('No token found');
 
-        const response = await fetchAPI(`${link}/user/avatar`, {
+        const response = await fetchAPI(`/user/avatar`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,

@@ -1,9 +1,9 @@
 import type {Static} from '@sinclair/typebox';
 import {Type} from '@sinclair/typebox';
 import {convertToType} from '../convertToType';
-import {API_MOCK, SESSION_KEY} from "../../constants/session";
+import {SESSION_KEY} from "../../constants/session";
 
-const endpointPrefix = `${API_MOCK}/devices`;
+// const endpointPrefix = `${API_MOCK}/devices`;
 
 const DeviceHistorySchema = Type.Object({
     history: Type.Array(
@@ -55,7 +55,7 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('Authorization', `Bearer ${token}`);
 
         const query = `?uuid=${encodeURIComponent(deviceId)}`;
-        const url = `${endpointPrefix}${query}`;
+        const url = `${query}`;
 
         const response = await fetchApi(url, {
             method: 'GET',
@@ -79,7 +79,7 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('Authorization', `Bearer ${token}`);
 
         const query = `?uuid=${encodeURIComponent(deviceId)}`;
-        const url = `${endpointPrefix}/status${query}`;
+        const url = `/status${query}`;
 
         const response = await fetchApi(url, {
             method: 'GET',
@@ -101,7 +101,7 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('cache-control', 'no-cache');
         headers.append('Authorization', `Bearer ${token}`);
 
-        const endpoint = `${endpointPrefix}/delete`;
+        const endpoint = `/delete`;
 
         const body = JSON.stringify({ uuid: deviceId });
 
@@ -128,7 +128,7 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('Authorization', `Bearer ${token}`);
 
         const query = `?email=${encodeURIComponent(email)}`;
-        const url = `${endpointPrefix}${query}`;
+        const url = `${query}`;
 
         const response = await fetchApi(url, {
             method: 'GET',
