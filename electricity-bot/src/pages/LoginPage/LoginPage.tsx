@@ -37,7 +37,13 @@ export const LoginPage = () => {
             api.saveToken(user.token);
 
             const profile = await api.getCurrentUser();
-            const avatarUrl = await api.getAvatar();
+            let avatarUrl: string | null = null;
+            try {
+                avatarUrl = await api.getAvatar();
+            } catch (error) {
+                console.error('Failed to fetch avatar:', error);
+                avatarUrl = null; // Fallback value
+            }
             setUser({
                 id: profile.id,
                 firstName: profile.firstName,
