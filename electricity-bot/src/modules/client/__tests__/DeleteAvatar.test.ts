@@ -1,11 +1,10 @@
 ﻿import { initUserAPI } from '../index';
-import {API_MOCK, SESSION_KEY} from "../../../constants/session";
+import {SESSION_KEY} from "../../../constants/session";
 
 describe('initUserAPI', () => {
     const mockFetch = jest.fn();
     const api = initUserAPI(mockFetch as unknown as typeof fetch);
     const fakeToken = 'fake-token';
-    const baseUrl = API_MOCK
 
     beforeEach(() => {
         mockFetch.mockReset();
@@ -29,7 +28,7 @@ describe('initUserAPI', () => {
             const user = await api.deleteAvatar();
             expect(user).toEqual(responseBody);
             expect(mockFetch).toHaveBeenCalledWith(
-                `${baseUrl}/user/avatar`,
+                `/user/avatar`,
                 expect.objectContaining({
                     method: 'DELETE',
                     headers: {Authorization: `Bearer ${fakeToken}`},

@@ -1,11 +1,10 @@
 ﻿import { initUserAPI } from '../index';
-import {SESSION_KEY, API_MOCK} from "../../../constants/session";
+import {SESSION_KEY} from "../../../constants/session";
 
 describe('initUserAPI', () => {
     const mockFetch = jest.fn();
     const api = initUserAPI(mockFetch as unknown as typeof fetch);
     const fakeToken = 'fake-token';
-    const baseUrl = API_MOCK
 
     beforeEach(() => {
         mockFetch.mockReset();
@@ -30,7 +29,7 @@ describe('initUserAPI', () => {
             const user = await api.updateUser(updates);
             expect(user).toEqual(responseBody);
             expect(mockFetch).toHaveBeenCalledWith(
-                `${baseUrl}/user/me`,
+                `/user/me`,
                 expect.objectContaining({
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json', Authorization: `Bearer ${fakeToken}`},
