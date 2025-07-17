@@ -3,7 +3,7 @@ import {initUserAPI} from "../../modules/client";
 import React, {type FormEvent, useEffect, useMemo, useState} from "react";
 import styles from './SettingsPage.module.css';
 import {ActionButton} from "../../Components/ActionButton/ActionButton.tsx";
-import {API_MOCK, SESSION_KEY} from "../../constants/session.ts";
+import {SESSION_KEY} from "../../constants/session.ts";
 import moment from "moment-timezone";
 import userCardImage from '../../Components/UserCard/img/user-card.svg'
 import femaleImage from '../../Components/UserCard/img/female-user-image.png'
@@ -37,7 +37,7 @@ export const SettingsPage = () => {
     const [gender, setGender] = useState(user?.gender || 'other');
     const [timeZone, setTimeZone] = useState(user?.timeZone || '');
     const [avatar, setAvatar] = useState<File|null>(null);
-    const [previewAvatar, setPreviewAvatar] = useState<string | null>(user?.avatar || null);
+    const [previewAvatar, setPreviewAvatar] = useState<string | null>(user?.avatarUrl || null);
 
     const [devices, setDevices] = useState<Device[]>([]);
     const [deviceToDelete, setDeviceToDelete] = useState<Device | null>(null);
@@ -76,33 +76,24 @@ export const SettingsPage = () => {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        if (previewAvatar) {
+            URL.revokeObjectURL(previewAvatar);
+        }
+
         const localFile = URL.createObjectURL(file);
+        setAvatar(file);
         setPreviewAvatar(localFile);
 
         setUser(prev => prev
-            ? { ...prev, avatar: localFile }
+            ? { ...prev, avatarUrl: localFile }
             : prev
         );
-
-        try {
-            const updated = await api.uploadAvatar(file);
-            const serverAvatar = updated.avatar ? `${API_MOCK}${updated.avatar}` : localFile;
-
-            setUser(prev => prev
-                ? { ...prev, avatar: serverAvatar }
-                : prev
-            );
-        } catch (error) {
-            console.error('Failed to upload avatar:', error);
-            alert('Failed to upload avatar');
-        }
     }
 
     const onSubmit = async (e: FormEvent) => {
         e.preventDefault()
         try {
             await api.updateUser({ firstName, lastName, gender, timeZone });
-
             setUser(prev => prev ?
                     { ...prev, firstName, lastName, gender, timeZone }
                     : prev
@@ -110,20 +101,18 @@ export const SettingsPage = () => {
 
             if (previewAvatar === null) {
                 await api.deleteAvatar();
-
                 setUser(prev => prev ?
-                { ...prev, avatar: undefined } : prev)
-
+                { ...prev, avatarUrl: undefined } : prev)
             }
             else if (avatar) {
-                const updated = await api.uploadAvatar(avatar);
-                const newAvatar = updated.avatar ? `${API_MOCK}${updated.avatar}` : previewAvatar!;
+                await api.uploadAvatar(avatar);
+                const url = await api.getAvatar();
 
                 setUser(prev => prev ?
-                    {...prev, avatar: newAvatar } : prev
+                    {...prev, avatarUrl: url } : prev
                 );
 
-                setPreviewAvatar(newAvatar);
+                setPreviewAvatar(url);
                 setAvatar(null);
             }
 
@@ -141,7 +130,7 @@ export const SettingsPage = () => {
     return (
         <div className={styles.settingsPage}>
             <div className={styles.settingsPageUserInfo}>
-                <img className={styles.avatar} src={previewAvatar ?? user.avatar ?? defaultImage(user.gender)} alt="avatar"/>
+                <img className={styles.avatar} src={previewAvatar ?? user.avatarUrl ?? defaultImage(user.gender)} alt="avatar"/>
                 <div className={styles.userInfo}>
                     <p className={styles.userName}>{user?.firstName} {user?.lastName}</p>
                     <p className={styles.userEmail}>{user.email}</p>
@@ -197,6 +186,7 @@ export const SettingsPage = () => {
                                 ? 'Change Avatar'
                                 : 'Upload Avatar'}
                             <input
+                                name="avatar"
                                 type="file"
                                 accept="image/*"
                                 onChange={onFileChange}
@@ -208,7 +198,7 @@ export const SettingsPage = () => {
                             <div className={styles.avatarPreview}>
                                 <img
                                     className={styles.avatarPreviewImage}
-                                    src={previewAvatar ?? user.avatar} alt="avatar preview"/>
+                                    src={previewAvatar ?? user.avatarUrl} alt="avatar preview"/>
 
                                 <button type='button'
                                         className={styles.avatarRemoveButton}

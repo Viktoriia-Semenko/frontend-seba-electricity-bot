@@ -7,7 +7,7 @@ import { AppPreview } from '../../Components/AppPreview/AppPreview';
 import {useRef, useState} from 'react';
 import { useUserContext } from '../../context/UserContext';
 import {Navigate} from "react-router-dom";
-import {API_MOCK, SESSION_KEY} from "../../constants/session.ts";
+import {SESSION_KEY} from "../../constants/session.ts";
 
 const api = initUserAPI(fetch);
 
@@ -37,13 +37,21 @@ export const LoginPage = () => {
             api.saveToken(user.token);
 
             const profile = await api.getCurrentUser();
+            let avatarUrl: string | undefined = undefined;
+            try {
+                avatarUrl = await api.getAvatar();
+            } catch (error) {
+                console.error('Failed to fetch avatar:', error);
+                avatarUrl = undefined; // Fallback value
+            }
             setUser({
                 id: profile.id,
                 firstName: profile.firstName,
                 lastName: profile.lastName,
                 email: profile.email,
                 gender: profile.gender as 'male'|'female'|'other',
-                avatar: profile.avatar ? `${API_MOCK}${profile.avatar}` : undefined,
+                avatarUrl: avatarUrl,
+                timeZone: profile.timeZone,
             });
 
             navigate('/home');

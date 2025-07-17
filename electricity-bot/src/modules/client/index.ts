@@ -16,7 +16,6 @@ const UserSchema = Type.Object({
         Type.Literal('other'),
     ]),
     token: Type.String(),
-    avatar: Type.Optional(Type.String()),
     timeZone: Type.Optional(Type.String()),
 });
 
@@ -172,6 +171,32 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         }
     }
 
+    const getAvatar = async (): Promise<string> => {
+        const token = getToken();
+        if (!token) throw new Error('No token found');
+
+        const response = await fetchAPI(`${link}/user/avatar`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+                throw new Error('Failed to fetch avatar: Authentication error (invalid or missing token)');
+            } else if (response.status >= 500 && response.status < 600) {
+                throw new Error('Failed to fetch avatar: Server error');
+            } else {
+                throw new Error(`Failed to fetch avatar: HTTP status ${response.status}`);
+            }
+        }
+
+        const blob = await response.blob();
+
+        return URL.createObjectURL(blob);
+    }
+
     const saveToken = (token: string) => {
         localStorage.setItem(SESSION_KEY, token);
     };
@@ -193,6 +218,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         getCurrentUser,
         updateUser,
         uploadAvatar,
-        deleteAvatar
+        deleteAvatar,
+        getAvatar
     };
 };

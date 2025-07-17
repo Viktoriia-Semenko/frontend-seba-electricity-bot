@@ -8,7 +8,7 @@ interface User {
     gender: 'male' | 'female' | 'other';
     token?: string;
     email: string;
-    avatar?: string;
+    avatarUrl?: string;
     timeZone?: string;
 }
 

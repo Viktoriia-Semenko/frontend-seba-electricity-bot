@@ -2,11 +2,11 @@ import styles from './MainLayout.module.css';
 import { UserCard } from '../../Components/UserCard/UserCard';
 import { Button } from '../../Components/Button/Button';
 import { Header } from '../../Components/Header/Header';
-import type { ReactNode } from 'react';
+import {type ReactNode, useMemo} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useUserContext } from '../../context/UserContext';
-import { API_MOCK, SESSION_KEY } from "../../constants/session.ts";
+import {SESSION_KEY } from "../../constants/session.ts";
 import { initUserAPI } from "../../modules/client";
 
 interface MainLayoutProps {
@@ -19,6 +19,8 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
     const { user, setUser } = useUserContext();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+    const api = useMemo(() => initUserAPI(fetch), []);
+
     useEffect(() => {
         const token = localStorage.getItem(SESSION_KEY);
         if (!token) {
@@ -27,23 +29,25 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
         }
 
         if (!user) {
-            initUserAPI(fetch).getCurrentUser()
-                .then(data => {
+            api.getCurrentUser()
+                .then(data =>  {
                     setUser({
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        gender: ['male', 'female', 'other'].includes(data.gender) ? data.gender as 'male' | 'female' | 'other' : 'other',
-                        email: data.email,
-                        avatar: data.avatar ? `${API_MOCK}${data.avatar}` : undefined,
-                        timeZone: data.timeZone
+                        ...data,
+                        avatarUrl: undefined,
                     });
-                }).catch(() => {
+                    return api.getAvatar();
+                })
+                .then(url => {
+                    setUser(prev => prev ? {...prev, avatarUrl:url} : prev);
+                })
+                .catch(error => {
+                    console.error('Failed to fetch user data:', error);
                     localStorage.removeItem(SESSION_KEY);
                     navigate('/login');
                 });
         }
 
-    }, [navigate, setUser, user]);
+    }, [api, navigate, setUser, user]);
 
     if (!user) return null;
 
@@ -61,7 +65,7 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
                         firstName={user.firstName}
                         lastName={user.lastName}
                         sex={user.gender}
-                        image={user.avatar}
+                        image={user.avatarUrl}
                         onClick={() => navigate('/settings')}
                     />
                 </div>
