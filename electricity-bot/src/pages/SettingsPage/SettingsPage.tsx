@@ -75,9 +75,9 @@ export const SettingsPage = () => {
     const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        setAvatar(file);
 
         const localFile = URL.createObjectURL(file);
+        setAvatar(file);
         setPreviewAvatar(localFile);
 
         setUser(prev => prev
