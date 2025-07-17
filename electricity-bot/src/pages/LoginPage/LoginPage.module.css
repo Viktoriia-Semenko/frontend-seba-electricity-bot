@@ -15,7 +15,8 @@
 }
 
 .phoneImage {
-    height: 90%;
+    width: 100%;
+    height: auto;
     object-fit: contain;
 }
 
@@ -42,18 +43,28 @@
 }
 
 @media (max-width: 900px) {
-    .wrapper {
-        flex-direction: column;
-    }
-
     .phoneZone {
         width: 100%;
-        height: 300px;
+        height: auto;
+        max-height: 300px;
         min-width: unset;
     }
 
+    .phoneZone {
+        display: none;
+    }
+}
+
+@media (max-width: 500px) {
+    .phoneZone {
+        display: none;
+    }
     .loginZone {
-        padding: 40px 20px;
+        align-items: stretch;
     }
 
+    .formWrapper {
+        max-width: 100%;
+        width: 100%;
+    }
 }
