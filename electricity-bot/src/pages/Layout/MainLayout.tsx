@@ -4,10 +4,10 @@ import { Button } from '../../Components/Button/Button';
 import { Header } from '../../Components/Header/Header';
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useUserContext } from '../../context/UserContext';
-import {API_MOCK, SESSION_KEY} from "../../constants/session.ts";
-import {initUserAPI} from "../../modules/client";
+import { API_MOCK, SESSION_KEY } from "../../constants/session.ts";
+import { initUserAPI } from "../../modules/client";
 
 interface MainLayoutProps {
     children: ReactNode;
@@ -17,6 +17,7 @@ interface MainLayoutProps {
 export const MainLayout = ({ children, page }: MainLayoutProps) => {
     const navigate = useNavigate();
     const { user, setUser } = useUserContext();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem(SESSION_KEY);
@@ -48,7 +49,13 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
 
     return (
         <div className={styles.wrapper}>
-            <aside className={styles.sidebar}>
+            <button className={styles.hamburger} onClick={() => setIsSidebarOpen(prev => !prev)}>
+                ☰
+            </button>
+
+            {isSidebarOpen && <div className={styles.overlay} onClick={() => setIsSidebarOpen(false)} />}
+
+            <aside className={`${styles.sidebar} ${isSidebarOpen ? styles.open : ''}`}>
                 <div className={styles.userCard}>
                     <UserCard
                         firstName={user.firstName}
@@ -59,23 +66,12 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
                     />
                 </div>
                 <nav className={styles.nav}>
-                    <Button
-                        title="Home"
-                        type={page === 'home' ? 'active' : 'inactive'}
-                        onClick={() => navigate('/home')}
-                    />
-                    <Button
-                        title="History"
-                        type={page === 'history' ? 'active' : 'inactive'}
-                        onClick={() => navigate('/history')}
-                    />
-                    <Button
-                        title="Settings"
-                        type={page === 'settings' ? 'active' : 'inactive'}
-                        onClick={() => navigate('/settings')}
-                    />
+                    <Button title="Home" type={page === 'home' ? 'active' : 'inactive'} onClick={() => navigate('/home')} />
+                    <Button title="History" type={page === 'history' ? 'active' : 'inactive'} onClick={() => navigate('/history')} />
+                    <Button title="Settings" type={page === 'settings' ? 'active' : 'inactive'} onClick={() => navigate('/settings')} />
                 </nav>
             </aside>
+
             <main className={styles.content}>
                 <Header title={capitalize(page)} pageType="main" />
                 {children}
