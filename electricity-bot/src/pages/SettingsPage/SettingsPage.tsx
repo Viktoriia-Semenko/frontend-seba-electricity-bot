@@ -76,6 +76,10 @@ export const SettingsPage = () => {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        if (previewAvatar) {
+            URL.revokeObjectURL(previewAvatar);
+        }
+
         const localFile = URL.createObjectURL(file);
         setAvatar(file);
         setPreviewAvatar(localFile);
