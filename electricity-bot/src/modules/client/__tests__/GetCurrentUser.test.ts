@@ -17,6 +17,8 @@ describe('getCurrentUser', () => {
             email: 'ivan@example.com',
             gender: 'male',
             token: 'abc123',
+            timeZone: 'America/New_York',
+            avatarUrl: 'https://example.com/avatar.png',
         };
 
         localStorage.setItem('bot-session', 'abc123');

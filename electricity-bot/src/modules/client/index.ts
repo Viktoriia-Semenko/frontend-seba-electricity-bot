@@ -17,6 +17,7 @@ const UserSchema = Type.Object({
     ]),
     token: Type.String(),
     timeZone: Type.Optional(Type.String()),
+    avatarUrl: Type.Optional(Type.String()),
 });
 
 export const LoginRequestSchema = Type.Object({
@@ -114,12 +115,26 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         }
 
         const data = await response.json();
+        let user: User;
 
         try {
-            return convertToType(data, UserSchema);
+            user = convertToType(data, UserSchema);
         } catch {
             throw new Error('Data is not valid');
         }
+
+        if (data.avatarUrl) {
+            return user
+        }
+
+        try {
+            user.avatarUrl = await getAvatar();
+        } catch (error) {
+            console.error('Failed to fetch avatar:', error);
+            user.avatarUrl = undefined; // Fallback value
+        }
+
+        return user;
     };
 
     const updateUser = async (payload: {
