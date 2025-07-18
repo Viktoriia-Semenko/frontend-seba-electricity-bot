@@ -6,7 +6,7 @@ import {SESSION_KEY} from '../../constants/session';
 //const link = `${API_MOCK}`
 
 const UserSchema = Type.Object({
-    id: Type.String(),
+    id: Type.Number(),
     firstName: Type.String(),
     lastName: Type.String(),
     email: Type.String(),
