@@ -15,7 +15,7 @@ const UserSchema = Type.Object({
         Type.Literal('female'),
         Type.Literal('other'),
     ]),
-    token: Type.String(),
+    token:  Type.Optional(Type.String()),
     timeZone: Type.Optional(Type.String()),
     avatarUrl: Type.Optional(Type.String()),
 });
@@ -55,9 +55,18 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         }
 
         saveToken(token);
-        const data = await getCurrentUser();
-        const user  = convertToType(data, UserSchema);
-        return {...user, token};
+
+        let data;
+        try {
+            data = await getCurrentUser(); // отримуємо дані юзера по токену
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (e) {
+            console.warn('Could not fetch user after login');
+            throw new Error('Login failed: unable to retrieve user data');
+        }
+
+        const user = convertToType(data, UserSchema);
+        return { ...user, token };
     };
 
     const registerUser = async (payload: {
@@ -94,9 +103,24 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         }
 
         saveToken(token);
-        const data = await getCurrentUser();
-        const user  = convertToType(data, UserSchema);
-        return {...user, token};
+
+        let data;
+        try {
+            data = await getCurrentUser();
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (e) {
+            console.warn('Could not fetch user, fallbacking');
+            data = {
+                id: 0,
+                firstName: payload.firstName,
+                lastName: payload.lastName,
+                email: payload.email,
+                gender: payload.gender
+            };
+        }
+
+        const user = convertToType(data, UserSchema);
+        return { ...user, token };
     };
 
     const getCurrentUser = async (): Promise<User> => {
@@ -130,8 +154,12 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         try {
             user.avatarUrl = await getAvatar();
         } catch (error) {
-            console.error('Failed to fetch avatar:', error);
-            user.avatarUrl = undefined; // Fallback value
+            if (error instanceof Error && error.message?.includes('404')) {
+                console.warn('Avatar not found, continuing without it');
+                user.avatarUrl = undefined;
+            } else {
+                throw error;
+            }
         }
 
         return user;

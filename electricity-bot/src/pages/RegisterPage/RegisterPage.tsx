@@ -4,12 +4,14 @@ import { RegistrationForm } from '../../Components/RegistrationForm/Registration
 import { useNavigate } from 'react-router-dom';
 import { initUserAPI } from '../../modules/client';
 import { AppPreview } from '../../Components/AppPreview/AppPreview';
+import {useUserContext} from "../../context/UserContext.tsx";
 
 const api = initUserAPI(fetch);
 
 export const RegisterPage = () => {
     const navigate = useNavigate();
 
+    const { setUser } = useUserContext();
     const [isDisabled, setIsDisabled] = useState(false);
 
     const firstNameRef = useRef<HTMLInputElement>(null);
@@ -31,7 +33,8 @@ export const RegisterPage = () => {
                 gender: genderRef.current?.value || '',
             };
 
-            await api.registerUser(payload);
+            const user = await api.registerUser(payload);
+            setUser(user)
 
             navigate('/home');
         } catch (error) {

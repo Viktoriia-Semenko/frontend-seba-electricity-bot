@@ -1,10 +1,10 @@
 import {Navigate, Outlet} from "react-router-dom";
-import {SESSION_KEY} from "../../constants/session.ts";
+import {useUserContext} from "../../context/UserContext.tsx";
 
 export const ProtectedRoute = () => {
-    const token = localStorage.getItem(SESSION_KEY);
+    const { user } = useUserContext();
 
-    if (!token) {
+    if (!user || !user.token) {
         return <Navigate to="/login" replace />;
     }
 
