@@ -43,11 +43,20 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
             throw new Error('Login failed');
         }
 
-        const {token} = await response.json();
-        saveToken(token);
 
+        let token: string;
+        const rawToken = await response.text();
+
+        try {
+            token = JSON.parse(rawToken).token;
+        } catch  {
+            token = rawToken.trim();
+        }
+
+        saveToken(token);
         const data = await getCurrentUser();
-        return convertToType(data, UserSchema);
+        const user  = convertToType(data, UserSchema);
+        return {...user, token};
     };
 
     const registerUser = async (payload: {
@@ -73,10 +82,20 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
             throw new Error('Registration failed');
         }
 
-        const {token} = await response.json();
+        let token: string;
+        const rawToken = await response.text();
+        console.log(rawToken)
+
+        try {
+            token = JSON.parse(rawToken).token;
+        } catch  {
+            token = rawToken.trim();
+        }
+
         saveToken(token);
-        const data = getCurrentUser();
-        return convertToType(data, UserSchema);
+        const data = await getCurrentUser();
+        const user  = convertToType(data, UserSchema);
+        return {...user, token};
     };
 
     const getCurrentUser = async (): Promise<User> => {
