@@ -43,7 +43,10 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
             throw new Error('Login failed');
         }
 
-        const data = await response.json();
+        const {token} = await response.json();
+        saveToken(token);
+
+        const data = await getCurrentUser();
         return convertToType(data, UserSchema);
     };
 
@@ -70,7 +73,9 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
             throw new Error('Registration failed');
         }
 
-        const data = await response.json();
+        const {token} = await response.json();
+        saveToken(token);
+        const data = getCurrentUser();
         return convertToType(data, UserSchema);
     };
 

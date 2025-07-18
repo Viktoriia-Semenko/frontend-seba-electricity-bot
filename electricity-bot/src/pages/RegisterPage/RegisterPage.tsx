@@ -31,8 +31,8 @@ export const RegisterPage = () => {
                 gender: genderRef.current?.value || '',
             };
 
-            const user = await api.registerUser(payload);
-            api.saveToken(user.token);
+            await api.registerUser(payload);
+
             navigate('/home');
         } catch (error) {
             alert('Registration failed: ' + (error as Error).message);

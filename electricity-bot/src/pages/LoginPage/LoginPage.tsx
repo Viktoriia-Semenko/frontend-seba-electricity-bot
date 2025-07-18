@@ -34,9 +34,8 @@ export const LoginPage = () => {
             };
 
             const user = await api.loginUser(payload);
-            api.saveToken(user.token);
 
-            const profile = await api.getCurrentUser();
+            //const profile = await api.getCurrentUser();
             let avatarUrl: string | undefined = undefined;
             try {
                 avatarUrl = await api.getAvatar();
@@ -45,13 +44,13 @@ export const LoginPage = () => {
                 avatarUrl = undefined; // Fallback value
             }
             setUser({
-                id: profile.id,
-                firstName: profile.firstName,
-                lastName: profile.lastName,
-                email: profile.email,
-                gender: profile.gender as 'male'|'female'|'other',
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                gender: user.gender as 'male'|'female'|'other',
                 avatarUrl: avatarUrl,
-                timeZone: profile.timeZone,
+                timeZone: user.timeZone,
             });
 
             navigate('/home');
