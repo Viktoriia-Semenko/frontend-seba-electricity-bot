@@ -2,7 +2,7 @@ import { createContext, useContext, useState, type Dispatch, type SetStateAction
 import type { ReactNode } from 'react';
 
 interface User {
-    id?: string;
+    id?: number;
     firstName: string;
     lastName: string;
     gender: 'male' | 'female' | 'other';
