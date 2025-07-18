@@ -211,13 +211,13 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
             throw new Error('Failed to upload avatar');
         }
 
-        const data = await response.json();
-
-        try {
-            return convertToType(data, UserSchema);
-        } catch {
-            throw new Error('Data is not valid');
+        const text = await response.text();
+        if (!text) {
+            throw new Error('Empty response from server'); // або повертай fallback
         }
+
+        const data = JSON.parse(text);
+        return convertToType(data, UserSchema);
     }
 
     const deleteAvatar = async (): Promise<User> => {
@@ -233,13 +233,23 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
             throw new Error('Failed to delete avatar');
         }
 
-        const data = await response.json();
-
-        try {
-            return convertToType(data, UserSchema);
-        } catch {
-            throw new Error('Data is not valid');
+        if (response.status === 204 || response.headers.get('Content-Length') === '0') {
+            return {
+                id: 0,
+                firstName: '',
+                lastName: '',
+                email: '',
+                gender: 'other'
+            };
         }
+
+        const text = await response.text();
+        if (!text) {
+            throw new Error('Empty response from server');
+        }
+
+        const data = JSON.parse(text);
+        return convertToType(data, UserSchema);
     }
 
     const getAvatar = async (): Promise<string> => {
