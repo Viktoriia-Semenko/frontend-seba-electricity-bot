@@ -21,7 +21,7 @@ const UserSchema = Type.Object({
 });
 
 export const LoginRequestSchema = Type.Object({
-    username: Type.String(),
+    email: Type.String(),
     password: Type.String()
 });
 

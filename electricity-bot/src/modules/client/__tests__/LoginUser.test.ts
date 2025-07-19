@@ -26,7 +26,7 @@ describe('clients module', () => {
             json: async () => mockUser
         });
 
-        const user = await api.loginUser({username: 'taras.shevchenko@example.com', password: 'password123'});
+        const user = await api.loginUser({email: 'taras.shevchenko@example.com', password: 'password123'});
 
         expect(user.email).toBe('taras.shevchenko@example.com');
     });
@@ -34,7 +34,7 @@ describe('clients module', () => {
     it('should throw error if login fails', async () => {
         mockFetch.mockResolvedValueOnce({ ok: false, status: 401 });
 
-        await expect(api.loginUser({username: 'lesya.ukrainka@mail.com', password: '123'})).rejects.toThrow('Login failed');
+        await expect(api.loginUser({email: 'lesya.ukrainka@mail.com', password: '123'})).rejects.toThrow('Login failed');
     });
 
     it('should throw error if response does not match UserSchema', async () => {
@@ -43,7 +43,7 @@ describe('clients module', () => {
             json: async () => ({ invalid: 'data' }),
         });
 
-        await expect(api.loginUser({username: 'ivan.franko@example.com', password: 'qwerty'}))
+        await expect(api.loginUser({email: 'ivan.franko@example.com', password: 'qwerty'}))
             .rejects.toThrow('Data is not valid');
     });
 
@@ -59,7 +59,7 @@ describe('clients module', () => {
             })
         });
 
-        await expect(api.loginUser({username: 'ivan.franko@example.com', password: 'qwerty'}))
+        await expect(api.loginUser({email: 'ivan.franko@example.com', password: 'qwerty'}))
             .rejects.toThrow('Data is not valid');
     });
 });

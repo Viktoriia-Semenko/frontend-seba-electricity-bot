@@ -29,7 +29,7 @@ export const LoginPage = () => {
 
         try {
             const payload = {
-                username: emailRef.current?.value || '',
+                email: emailRef.current?.value || '',
                 password: passwordRef.current?.value || '',
             };
 
