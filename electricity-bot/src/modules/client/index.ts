@@ -16,7 +16,7 @@ const UserSchema = Type.Object({
         Type.Literal('other'),
     ]),
     token:  Type.Optional(Type.String()),
-    timeZone: Type.Optional(Type.String()),
+    timeZone: Type.Optional(Type.Union([Type.String(), Type.Null()])),
     avatarUrl: Type.Optional(Type.String()),
 });
 
@@ -239,7 +239,8 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
                 firstName: '',
                 lastName: '',
                 email: '',
-                gender: 'other'
+                gender: 'other',
+                timeZone: null
             };
         }
 
