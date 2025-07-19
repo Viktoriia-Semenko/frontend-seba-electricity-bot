@@ -34,25 +34,7 @@ export const LoginPage = () => {
             };
 
             const user = await api.loginUser(payload);
-
-            //const profile = await api.getCurrentUser();
-            let avatarUrl: string | undefined = undefined;
-            try {
-                avatarUrl = await api.getAvatar();
-            } catch (error) {
-                console.error('Failed to fetch avatar:', error);
-                avatarUrl = undefined; // Fallback value
-            }
-            setUser({
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                gender: user.gender as 'male'|'female'|'other',
-                avatarUrl: avatarUrl,
-                timeZone: user.timeZone,
-            });
-
+            setUser(user);
             navigate('/home');
 
         } catch (error) {
