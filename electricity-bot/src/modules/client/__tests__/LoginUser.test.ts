@@ -4,13 +4,13 @@ const mockFetch = jest.fn();
 const api = initUserAPI(mockFetch);
 
 const mockUser = {
-    id: '1',
+    id: 1,
     firstName: 'Taras',
     lastName: 'Shevchenko',
     email: 'taras.shevchenko@example.com',
     gender: 'male',
     token: 'abc123',
-    avatar: 'https://example.com/avatar.png',
+    avatarUrl: 'https://example.com/avatar.png',
     timeZone: 'UTC+2'
 };
 
@@ -23,13 +23,21 @@ describe('clients module', () => {
     it('should login user successfully', async () => {
         mockFetch.mockResolvedValueOnce({
             ok: true,
-            json: async () => mockUser
-        });
+            json: async () => ({ token: mockUser.token })
+        })
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => mockUser
+            });
 
-        const user = await api.loginUser({email: 'taras.shevchenko@example.com', password: 'password123'});
+        const user = await api.loginUser({
+            email: 'taras.shevchenko@example.com',
+            password: 'password123'
+        });
 
         expect(user.email).toBe('taras.shevchenko@example.com');
     });
+
 
     it('should throw error if login fails', async () => {
         mockFetch.mockResolvedValueOnce({ ok: false, status: 401 });
@@ -51,7 +59,7 @@ describe('clients module', () => {
         mockFetch.mockResolvedValueOnce({
             ok: true,
             json: async () => ({
-                id: '1',
+                id: 1,
                 firstName: 'Ivan',
                 lastName: 'Franko',
                 email: 'ivan.franko@example.com',

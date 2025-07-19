@@ -45,28 +45,24 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         }
 
 
-        let token: string;
-        const rawToken = await response.text();
+        const data = await response.json();
 
-        try {
-            token = JSON.parse(rawToken).token;
-        } catch  {
-            token = rawToken.trim();
+        if (!data.token) {
+            throw new Error('Data is not valid');
         }
 
-        saveToken(token);
+        saveToken(data.token);
 
-        let data;
+        let userData;
         try {
-            data = await getCurrentUser();
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (e) {
+            userData = await getCurrentUser();
+        } catch {
             console.warn('Could not fetch user after login');
             throw new Error('Login failed: unable to retrieve user data');
         }
 
-        const user = convertToType(data, UserSchema);
-        return { ...user, token };
+        const user = convertToType(userData, UserSchema);
+        return { ...user, token: data.token };
     };
 
     const registerUser = async (payload: {

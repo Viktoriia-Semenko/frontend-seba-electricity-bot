@@ -17,7 +17,7 @@ describe('initUserAPI', () => {
         it('sends PUT and returns updated user', async () => {
             const updates = {firstName: 'New'};
             const responseBody = {
-                id: '3',
+                id: 3,
                 firstName: 'New',
                 lastName: 'Y',
                 email: 'x@y.com',
