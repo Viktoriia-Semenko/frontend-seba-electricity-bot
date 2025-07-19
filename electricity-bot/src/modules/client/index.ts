@@ -58,7 +58,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
 
         let data;
         try {
-            data = await getCurrentUser(); // отримуємо дані юзера по токену
+            data = await getCurrentUser();
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
             console.warn('Could not fetch user after login');

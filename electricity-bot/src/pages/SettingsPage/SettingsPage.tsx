@@ -50,6 +50,21 @@ export const SettingsPage = () => {
             .catch(console.error);
     }, [user, deviceApi]);
 
+    useEffect(() => {
+        if (user) {
+            setFirstName(user.firstName || '');
+            setLastName(user.lastName || '');
+            setGender(user.gender || 'other');
+
+            const cachedTZ = localStorage.getItem('user-timezone');
+            if (user?.timeZone || cachedTZ) {
+                    setTimeZone(user?.timeZone ?? cachedTZ ?? '');
+            }
+
+            setPreviewAvatar(user.avatarUrl || null);
+        }
+    }, [user]);
+
     const openDeleteModal = (device: Device) => setDeviceToDelete(device);
     const closeDeleteModal = () => setDeviceToDelete(null);
     const onDeleteDevice = async () => {
@@ -115,6 +130,8 @@ export const SettingsPage = () => {
                 setPreviewAvatar(url);
                 setAvatar(null);
             }
+
+            localStorage.setItem('user-timezone', timeZone);
 
             alert('User information updated successfully');
         } catch (error) {
