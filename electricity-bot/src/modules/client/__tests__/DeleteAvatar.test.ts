@@ -16,7 +16,7 @@ describe('initUserAPI', () => {
 
         it('deletes avatar and returns user', async () => {
             const responseBody = {
-                id: '5',
+                id: 5,
                 firstName: 'H',
                 lastName: 'I',
                 email: 'h@i.com',

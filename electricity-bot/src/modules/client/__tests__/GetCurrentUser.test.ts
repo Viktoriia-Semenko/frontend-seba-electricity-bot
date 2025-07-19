@@ -11,7 +11,7 @@ describe('getCurrentUser', () => {
 
     it('should return user data if token exists and response is valid', async () => {
         const mockUser = {
-            id: '1',
+            id: 1,
             firstName: 'Ivan',
             lastName: 'Franko',
             email: 'ivan@example.com',
@@ -61,7 +61,7 @@ describe('getCurrentUser', () => {
 
     it('should return user with avatar and timeZone if present', async () => {
         const mockUser = {
-            id: '1',
+            id: 1,
             firstName: 'Taras',
             lastName: 'Shevchenko',
             email: 'taras@example.com',
