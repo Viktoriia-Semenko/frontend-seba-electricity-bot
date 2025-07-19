@@ -105,6 +105,16 @@ export const HistoryPage = () => {
     if (loading) return <div className={styles.loading}>Loading...</div>;
     if (error) return <div className={styles.error}>{error}</div>;
 
+    if (history.length === 0) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.emptyState}>
+                    <p>No history available yet. Connect a device or wait for activity to appear.</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className={styles.container}>
             {Object.entries(grouped).map(([date, items]) => (

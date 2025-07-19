@@ -36,6 +36,12 @@
     color: #999;
 }
 
+.emptyState {
+    text-align: center;
+    padding: 2rem;
+    color: #ffffff;
+}
+
 @media (max-width: 1024px) {
     .container {
         padding: 20px;
