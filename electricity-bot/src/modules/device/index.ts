@@ -110,6 +110,9 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         if (!response.ok) {
             throw new Error(`Failed to delete device: ${response.status} ${response.statusText}`);
         }
+        if (response.status === 200 || response.headers.get('Content-Length') === '0') {
+            return {};
+        }
 
         const data = await response.json();
 
