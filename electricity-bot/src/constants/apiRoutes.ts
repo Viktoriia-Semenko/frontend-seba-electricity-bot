@@ -7,7 +7,7 @@ export const API_ROUTES = {
     },
     DEVICES: {
         BASE: '/api/devices',
-        STATUS: '/api/devices/status',
-        DELETE: '/api/delete',
+        STATUS: '/api/devices/status/',
+        DELETE: '/api/devices/delete',
     }
 };
