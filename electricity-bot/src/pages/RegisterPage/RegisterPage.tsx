@@ -48,6 +48,7 @@ export const RegisterPage = () => {
         <div className={styles.wrapper}>
             <AppPreview className={styles.phoneZone}/>
             <div className={styles.registerZone}>
+                <div className={styles.mobileHeader}>Electricity bot</div>
                 <div className={styles.header}>
                     <RegistrationForm
                         onSub={handleSubmit}

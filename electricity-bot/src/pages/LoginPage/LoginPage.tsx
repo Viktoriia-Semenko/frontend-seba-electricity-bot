@@ -48,6 +48,7 @@ export const LoginPage = () => {
         <div className={styles.wrapper}>
             <AppPreview className={styles.phoneZone} />
             <div className={styles.loginZone}>
+                <div className={styles.mobileHeader}>Electricity bot</div>
                 <div className={styles.header}>
                     <Header title="Login" pageType="login" />
                 </div>
