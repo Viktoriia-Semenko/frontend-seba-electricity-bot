@@ -3,7 +3,7 @@ import {initUserAPI} from "../../modules/client";
 import React, {type FormEvent, useEffect, useMemo, useState} from "react";
 import styles from './SettingsPage.module.css';
 import {ActionButton} from "../../Components/ActionButton/ActionButton.tsx";
-import {SESSION_KEY} from "../../constants/session.ts";
+import {SESSION_KEY, USER_TIMEZONE} from "../../constants/session.ts";
 import moment from "moment-timezone";
 import userCardImage from '../../Components/UserCard/img/user-card.svg'
 import femaleImage from '../../Components/UserCard/img/female-user-image.png'
@@ -275,6 +275,7 @@ export const SettingsPage = () => {
                 <div className={styles.settingsPageActions}>
                     <ActionButton title="Logout" onClick={() => {
                         localStorage.removeItem(SESSION_KEY);
+                        localStorage.removeItem(USER_TIMEZONE);
                         setUser(null);
                         navigate('/login', { replace: true});
                     }} />
