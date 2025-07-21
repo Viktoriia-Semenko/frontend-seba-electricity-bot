@@ -8,7 +8,7 @@ type Device = {
     uuid: string;
     name?: string;
     status: 'ON' | 'OFF' | 'error';
-    lastChange: string;
+    lastChange: string | null;
 };
 
 type HistoryItem = {

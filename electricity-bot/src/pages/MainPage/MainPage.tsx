@@ -10,7 +10,7 @@ interface Device {
     uuid: string;
     name?: string;
     status: 'ON' | 'OFF' | 'error';
-    lastChange: string;
+    lastChange: string | null;
 }
 
 export const MainPage = () => {
@@ -47,7 +47,7 @@ export const MainPage = () => {
 
         api.getDeviceStatus(selectedDevice)
             .then(res => {
-                setCurrentStatus({status: res.status, lastChange: res.lastChange});
+                setCurrentStatus({status: res.status, lastChange: res.lastChange || new Date().toISOString()});
                 setError(null);
             })
             .catch(err => {
@@ -76,7 +76,7 @@ export const MainPage = () => {
                             setLoading(true);
                             try {
                                 const res = await api.getDeviceStatus(selectedDevice!);
-                                setCurrentStatus({status: res.status, lastChange: res.lastChange});
+                                setCurrentStatus({status: res.status, lastChange: res.lastChange || new Date().toISOString()});
                             } catch (err) {
                                 console.error('Error fetching device status:', err);
                                 setError('Failed to fetch device status');

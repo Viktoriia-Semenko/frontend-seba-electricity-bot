@@ -15,7 +15,7 @@ const DeviceHistorySchema = Type.Object({
 
 const DeviceStatusSchema = Type.Object({
     status: Type.Union([Type.Literal('ON'), Type.Literal('OFF'), Type.Literal('error')]),
-    lastChange: Type.String(),
+    lastChange:  Type.Union([Type.String(), Type.Null()]),
 });
 
 const DeviceDeleteResponseSchema = Type.Object({});
@@ -26,7 +26,7 @@ const DeviceGetByUserResponseSchema = Type.Object({
             uuid: Type.String(),
             name: Type.Optional(Type.String()),
             status: Type.Union([Type.Literal('ON'), Type.Literal('OFF'), Type.Literal('error')]),
-            lastChange: Type.String(),
+            lastChange:  Type.Union([Type.String(), Type.Null()]),
         })
     )
 });
@@ -77,7 +77,7 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('cache-control', 'no-cache');
         headers.append('Authorization', `Bearer ${token}`);
 
-        const query = `?uuid=${encodeURIComponent(deviceId)}`;
+        const query = `${encodeURIComponent(deviceId)}`;
         const url = `${API_ROUTES.DEVICES.STATUS}${query}`;
 
         const response = await fetchApi(url, {
@@ -100,12 +100,11 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('cache-control', 'no-cache');
         headers.append('Authorization', `Bearer ${token}`);
 
-        const body = JSON.stringify({ uuid: deviceId });
+        const query = `${API_ROUTES.DEVICES.DELETE}/${encodeURIComponent(deviceId)}`;
 
-        const response = await fetchApi(API_ROUTES.DEVICES.DELETE, {
+        const response = await fetchApi(query, {
             method: 'DELETE',
-            headers,
-            body
+            headers
         });
 
         if (!response.ok) {

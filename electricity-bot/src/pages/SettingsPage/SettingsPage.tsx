@@ -16,7 +16,7 @@ interface Device {
     uuid: string;
     name?: string;
     status: 'ON' | 'OFF' | 'error';
-    lastChange: string;
+    lastChange: string | null;
 }
 
 function defaultImage(sex: 'male'|'female'|'other') {
