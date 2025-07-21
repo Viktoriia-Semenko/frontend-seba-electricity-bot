@@ -3,8 +3,6 @@ import type { Static } from '@sinclair/typebox';
 import { convertToType } from '../convertToType';
 import {SESSION_KEY} from '../../constants/session';
 
-//const link = `${API_MOCK}`
-
 const UserSchema = Type.Object({
     id: Type.Number(),
     firstName: Type.String(),
@@ -32,7 +30,7 @@ export type User = Static<typeof UserSchema>
 export const initUserAPI = (fetchAPI: typeof fetch) => {
 
     const loginUser = async (credentials: LoginRequest): Promise<User> => {
-        const response = await fetchAPI(`/login`, {
+        const response = await fetchAPI(`/api/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -44,25 +42,28 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
             throw new Error('Login failed');
         }
 
+        let token: string;
+        const rawToken = await response.text();
+        console.log(rawToken)
 
-        const data = await response.json();
-
-        if (!data.token) {
-            throw new Error('Data is not valid');
-        }
-
-        saveToken(data.token);
-
-        let userData;
         try {
-            userData = await getCurrentUser();
-        } catch {
-            console.warn('Could not fetch user after login');
-            throw new Error('Login failed: unable to retrieve user data');
+            token = JSON.parse(rawToken).token;
+        } catch  {
+            token = rawToken.trim();
         }
 
-        const user = convertToType(userData, UserSchema);
-        return { ...user, token: data.token };
+        saveToken(token);
+
+        let data;
+        try {
+            data = await getCurrentUser();
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (e) {
+            console.warn('Could not fetch user, fallbacking');
+        }
+
+        const user = convertToType(data, UserSchema);
+        return { ...user, token };
     };
 
     const registerUser = async (payload: {
@@ -76,7 +77,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
             ...payload,
             role: 'user' as const, // Assuming role is always 'user'
         }
-        const response = await fetchAPI(`/register`, {
+        const response = await fetchAPI(`/api/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -123,7 +124,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         const token = getToken();
         if (!token) throw new Error('No token found');
 
-        const response = await fetchAPI(`/user/me`, {
+        const response = await fetchAPI(`/api/user/me`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -169,7 +170,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
     }): Promise<User> => {
         const token = getToken();
 
-        const response = await fetchAPI(`/user/me`, {
+        const response = await fetchAPI(`/api/user/me`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -195,7 +196,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         const token = getToken();
         const formData = new FormData();
         formData.append('avatar', file);
-        const response = await fetchAPI(`/user/avatar`, {
+        const response = await fetchAPI(`/api/user/avatar`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -218,7 +219,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
 
     const deleteAvatar = async (): Promise<User> => {
         const token = getToken();
-        const response = await fetchAPI(`/user/avatar`, {
+        const response = await fetchAPI(`/api/user/avatar`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -253,7 +254,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         const token = getToken();
         if (!token) throw new Error('No token found');
 
-        const response = await fetchAPI(`/user/avatar`, {
+        const response = await fetchAPI(`/api/user/avatar`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,

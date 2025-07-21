@@ -3,7 +3,7 @@ import {Type} from '@sinclair/typebox';
 import {convertToType} from '../convertToType';
 import {SESSION_KEY} from "../../constants/session";
 
-const endpointPrefix = `/devices`;
+const endpointPrefix = `/api/devices`;
 
 const DeviceHistorySchema = Type.Object({
     history: Type.Array(
@@ -79,7 +79,7 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('Authorization', `Bearer ${token}`);
 
         const query = `?uuid=${encodeURIComponent(deviceId)}`;
-        const url = `/devices/status${query}`;
+        const url = `/api/devices/status${query}`;
 
         const response = await fetchApi(url, {
             method: 'GET',
@@ -101,7 +101,7 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('cache-control', 'no-cache');
         headers.append('Authorization', `Bearer ${token}`);
 
-        const endpoint = `/delete`;
+        const endpoint = `/api/delete`;
 
         const body = JSON.stringify({ uuid: deviceId });
 
@@ -127,7 +127,7 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('cache-control', 'no-cache');
         headers.append('Authorization', `Bearer ${token}`);
 
-        const query = `/devices?email=${encodeURIComponent(email)}`;
+        const query = `/api/devices?email=${encodeURIComponent(email)}`;
         const url = `${query}`;
 
         const response = await fetchApi(url, {
