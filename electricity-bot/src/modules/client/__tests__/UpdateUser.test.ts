@@ -1,5 +1,6 @@
 ﻿import { initUserAPI } from '../index';
 import {SESSION_KEY} from "../../../constants/session";
+import { API_ROUTES } from '../../../constants/apiRoutes';
 
 describe('initUserAPI', () => {
     const mockFetch = jest.fn();
@@ -29,7 +30,7 @@ describe('initUserAPI', () => {
             const user = await api.updateUser(updates);
             expect(user).toEqual(responseBody);
             expect(mockFetch).toHaveBeenCalledWith(
-                `/user/me`,
+                API_ROUTES.AUTH.CURRENT_USER,
                 expect.objectContaining({
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json', Authorization: `Bearer ${fakeToken}`},

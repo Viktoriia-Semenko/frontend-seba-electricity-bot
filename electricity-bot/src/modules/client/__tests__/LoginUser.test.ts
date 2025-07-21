@@ -21,10 +21,12 @@ describe('clients module', () => {
     });
 
     it('should login user successfully', async () => {
-        mockFetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => ({ token: mockUser.token })
-        })
+        mockFetch
+            .mockResolvedValueOnce({
+                ok: true,
+                text: async () => JSON.stringify({ token: mockUser.token })
+            })
+
             .mockResolvedValueOnce({
                 ok: true,
                 json: async () => mockUser
@@ -46,10 +48,15 @@ describe('clients module', () => {
     });
 
     it('should throw error if response does not match UserSchema', async () => {
-        mockFetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => ({ invalid: 'data' }),
-        });
+        mockFetch
+            .mockResolvedValueOnce({
+                ok: true,
+                text: async () => JSON.stringify({ token: mockUser.token })
+            })
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({ invalid: 'data' })
+            });
 
         await expect(api.loginUser({email: 'ivan.franko@example.com', password: 'qwerty'}))
             .rejects.toThrow('Data is not valid');
@@ -58,16 +65,12 @@ describe('clients module', () => {
     it('should throw error if token field is missing in response', async () => {
         mockFetch.mockResolvedValueOnce({
             ok: true,
-            json: async () => ({
-                id: 1,
-                firstName: 'Ivan',
-                lastName: 'Franko',
-                email: 'ivan.franko@example.com',
-                gender: 'male'
-            })
+            text: async () => JSON.stringify({})
         });
 
-        await expect(api.loginUser({email: 'ivan.franko@example.com', password: 'qwerty'}))
-            .rejects.toThrow('Data is not valid');
+        await expect(api.loginUser({
+            email: 'ivan.franko@example.com',
+            password: 'qwerty'
+        })).rejects.toThrow('Data is not valid');
     });
 });

@@ -1,5 +1,6 @@
 ﻿import { initUserAPI } from '../index';
 import {SESSION_KEY} from "../../../constants/session";
+import { API_ROUTES } from '../../../constants/apiRoutes';
 
 describe('initUserAPI', () => {
     const mockFetch = jest.fn();
@@ -28,7 +29,7 @@ describe('initUserAPI', () => {
             const user = await api.deleteAvatar();
             expect(user).toEqual(responseBody);
             expect(mockFetch).toHaveBeenCalledWith(
-                `/user/avatar`,
+                API_ROUTES.AUTH.AVATAR,
                 expect.objectContaining({
                     method: 'DELETE',
                     headers: {Authorization: `Bearer ${fakeToken}`},
