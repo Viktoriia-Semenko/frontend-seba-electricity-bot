@@ -2,6 +2,7 @@ import { Type } from '@sinclair/typebox';
 import type { Static } from '@sinclair/typebox';
 import { convertToType } from '../convertToType';
 import {SESSION_KEY} from '../../constants/session';
+import { API_ROUTES } from '../../constants/apiRoutes';
 
 const UserSchema = Type.Object({
     id: Type.Number(),
@@ -30,7 +31,7 @@ export type User = Static<typeof UserSchema>
 export const initUserAPI = (fetchAPI: typeof fetch) => {
 
     const loginUser = async (credentials: LoginRequest): Promise<User> => {
-        const response = await fetchAPI(`/api/login`, {
+        const response = await fetchAPI(API_ROUTES.AUTH.LOGIN, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -77,7 +78,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
             ...payload,
             role: 'user' as const, // Assuming role is always 'user'
         }
-        const response = await fetchAPI(`/api/register`, {
+        const response = await fetchAPI(API_ROUTES.AUTH.REGISTER, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -124,7 +125,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         const token = getToken();
         if (!token) throw new Error('No token found');
 
-        const response = await fetchAPI(`/api/user/me`, {
+        const response = await fetchAPI(API_ROUTES.AUTH.CURRENT_USER, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -170,7 +171,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
     }): Promise<User> => {
         const token = getToken();
 
-        const response = await fetchAPI(`/api/user/me`, {
+        const response = await fetchAPI(API_ROUTES.AUTH.CURRENT_USER, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -196,7 +197,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         const token = getToken();
         const formData = new FormData();
         formData.append('avatar', file);
-        const response = await fetchAPI(`/api/user/avatar`, {
+        const response = await fetchAPI(API_ROUTES.AUTH.AVATAR, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -219,7 +220,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
 
     const deleteAvatar = async (): Promise<User> => {
         const token = getToken();
-        const response = await fetchAPI(`/api/user/avatar`, {
+        const response = await fetchAPI(API_ROUTES.AUTH.AVATAR, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -254,7 +255,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
         const token = getToken();
         if (!token) throw new Error('No token found');
 
-        const response = await fetchAPI(`/api/user/avatar`, {
+        const response = await fetchAPI(API_ROUTES.AUTH.AVATAR, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,

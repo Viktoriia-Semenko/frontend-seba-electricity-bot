@@ -2,8 +2,7 @@ import type {Static} from '@sinclair/typebox';
 import {Type} from '@sinclair/typebox';
 import {convertToType} from '../convertToType';
 import {SESSION_KEY} from "../../constants/session";
-
-const endpointPrefix = `/api/devices`;
+import { API_ROUTES } from '../../constants/apiRoutes';
 
 const DeviceHistorySchema = Type.Object({
     history: Type.Array(
@@ -54,7 +53,7 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('cache-control', 'no-cache');
         headers.append('Authorization', `Bearer ${token}`);
 
-        const query = `${endpointPrefix}?uuid=${encodeURIComponent(deviceId)}`;
+        const query = `${API_ROUTES.DEVICES.BASE}?uuid=${encodeURIComponent(deviceId)}`;
         const url = `${query}`;
 
         const response = await fetchApi(url, {
@@ -79,7 +78,7 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('Authorization', `Bearer ${token}`);
 
         const query = `?uuid=${encodeURIComponent(deviceId)}`;
-        const url = `/api/devices/status${query}`;
+        const url = `${API_ROUTES.DEVICES.STATUS}${query}`;
 
         const response = await fetchApi(url, {
             method: 'GET',
@@ -101,11 +100,9 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('cache-control', 'no-cache');
         headers.append('Authorization', `Bearer ${token}`);
 
-        const endpoint = `/api/delete`;
-
         const body = JSON.stringify({ uuid: deviceId });
 
-        const response = await fetchApi(endpoint, {
+        const response = await fetchApi(API_ROUTES.DEVICES.DELETE, {
             method: 'DELETE',
             headers,
             body
@@ -127,7 +124,7 @@ export const initDeviceModule = (fetchApi: typeof fetch) => {
         headers.append('cache-control', 'no-cache');
         headers.append('Authorization', `Bearer ${token}`);
 
-        const query = `/api/devices?email=${encodeURIComponent(email)}`;
+        const query = `${API_ROUTES.DEVICES.BASE}?email=${encodeURIComponent(email)}`;
         const url = `${query}`;
 
         const response = await fetchApi(url, {
