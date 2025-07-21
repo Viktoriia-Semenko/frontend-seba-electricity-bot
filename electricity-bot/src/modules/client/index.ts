@@ -1,7 +1,7 @@
 import { Type } from '@sinclair/typebox';
 import type { Static } from '@sinclair/typebox';
 import { convertToType } from '../convertToType';
-import {SESSION_KEY} from '../../constants/session';
+import {SESSION_KEY, USER_TIMEZONE} from '../../constants/session';
 import { API_ROUTES } from '../../constants/apiRoutes';
 
 const UserSchema = Type.Object({
@@ -287,6 +287,7 @@ export const initUserAPI = (fetchAPI: typeof fetch) => {
 
     const removeToken = () => {
         localStorage.removeItem(SESSION_KEY);
+        localStorage.removeItem(USER_TIMEZONE);
     };
 
     return {

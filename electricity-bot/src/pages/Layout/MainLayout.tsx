@@ -6,7 +6,7 @@ import {type ReactNode, useMemo} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useUserContext } from '../../context/UserContext';
-import {SESSION_KEY } from "../../constants/session.ts";
+import {SESSION_KEY, USER_TIMEZONE} from "../../constants/session.ts";
 import { initUserAPI } from "../../modules/client";
 
 interface MainLayoutProps {
@@ -43,6 +43,7 @@ export const MainLayout = ({ children, page }: MainLayoutProps) => {
                 .catch(error => {
                     console.error('Failed to fetch user data:', error);
                     localStorage.removeItem(SESSION_KEY);
+                    localStorage.removeItem(USER_TIMEZONE);
                     navigate('/login');
                 });
         }
